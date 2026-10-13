@@ -1,0 +1,57 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/derivative-x2/brief.json",
+  "brief": {
+    "topic": "Derivative as the limit of secants",
+    "function": "x**2",
+    "x0": 1,
+    "h_start": 1.5
+  },
+  "brief_sha256": "f057d63489da1b1e0da710b4a4b51302ce4c49618e35c42e900172e5419b5bf4",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "c9dbf96ba7484fa64329ecf5bd50a484bb00c981d5f4033a0e1bf8594b1d4ad2",
+      "started_at": "2026-10-13T19:35:55+00:00",
+      "finished_at": "2026-10-13T19:35:55+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "d54ed7091982b1133b084f561e9656eb5faf4e43b9dacc18124ec3e24fcb89f9",
+      "started_at": "2026-10-13T19:35:55+00:00",
+      "finished_at": "2026-10-13T19:36:05+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/secant_tangent.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "fd8009d8334ddf2e57e20696d1b4f422333e8eb44b1ef032b0b0f52afe3aa757",
+      "started_at": "2026-10-13T19:36:05+00:00",
+      "finished_at": "2026-10-13T19:36:05+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "d282cdf718779714e8da2c6887e4980b1e08c90ff4b17b6109e7b932f7d0285c",
+      "started_at": "2026-10-13T19:36:05+00:00",
+      "finished_at": "2026-10-13T19:36:05+00:00",
+      "artifacts": [
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T19:36:05+00:00"
+}

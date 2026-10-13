@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview: Derivative as the limit of secants</title>
+<style>
+:root { --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --line: #d2d2d7;
+        --pass: #1a7f37; --fail: #c62828; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #161618; --fg: #f5f5f7; --muted: #a1a1a6; --line: #3a3a3c;
+          --pass: #4ac26b; --fail: #ff6b6b; }
+}
+body { margin: 0 auto; max-width: 900px; padding: 24px 16px; background: var(--bg);
+       color: var(--fg); font: 16px/1.5 -apple-system, system-ui, sans-serif; }
+video { width: 100%; border-radius: 8px; background: #000; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.muted { color: var(--muted); }
+.pass { color: var(--pass); font-weight: 600; }
+.fail, .unavailable { color: var(--fail); font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>Derivative as the limit of secants</h1>
+<p class="muted">f(x) = x² · x₀ = 1 · h: 1.5 → 0.01 · f′(x₀) = 2 · Tangent: y = 2x − 1</p>
+<video controls src="renders/secant_tangent.mp4"></video>
+<h2>Quality checks: <span class="pass">All checks passed</span></h2>
+<table>
+<tr><th>Check</th><th>Status</th><th>Detail</th></tr>
+<tr><td>video_file</td><td class="pass">pass</td><td>235480 bytes</td></tr>
+<tr><td>video_decodes</td><td class="pass">pass</td><td>287 frames at 15 fps</td></tr>
+<tr><td>resolution</td><td class="pass">pass</td><td>854x480 (expected 854x480)</td></tr>
+<tr><td>duration</td><td class="pass">pass</td><td>19.13 s (storyboard 19.00 s ± 1, limits 5–60 s)</td></tr>
+<tr><td>frames_not_blank</td><td class="pass">pass</td><td>visible content in sampled frames: 1.9%, 2.8%, 3.0%</td></tr>
+<tr><td>derivative</td><td class="pass">pass</td><td>f&#x27;(1) storyboard=2, exact=2, numeric=2.000000</td></tr>
+<tr><td>tangent_line</td><td class="pass">pass</td><td>expected Tangent: y = 2x − 1, storyboard says &#x27;Tangent: y = 2x − 1&#x27; (intercept -1)</td></tr>
+<tr><td>secant_converges</td><td class="pass">pass</td><td>|secant − f&#x27;| goes from 1.5000 (h=1.5) to 0.0100 (h=0.01)</td></tr>
+<tr><td>rendered_values</td><td class="pass">pass</td><td>drawn point, tangent, final h and labels match the storyboard</td></tr>
+</table>
+<p class="muted">Generated locally by the pipeline. Nothing has been uploaded.</p>
+</body>
+</html>

@@ -1,0 +1,28 @@
+[project]
+name = "edu-video-pipeline"
+version = "0.0.1"
+description = "AI-assisted educational math video pipeline built on Manim"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "manim==0.22.0",
+    "pydantic>=2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--cov=pipeline --cov-report=term-missing"
+markers = ["integration: renders a real video with Manim (about 30 s); skip with -m 'not integration'"]
+
+[tool.coverage.run]
+# Also measure `python -m pipeline` and the Manim template, which run in subprocesses.
+patch = ["subprocess"]
+
+[tool.coverage.report]
+fail_under = 80

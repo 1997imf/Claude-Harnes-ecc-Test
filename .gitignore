@@ -1,1 +1,18 @@
 /ECC/
+
+# Python environment and caches
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+
+# Secrets (API keys, OAuth tokens) - never commit
+.env
+.env.*
+!.env.example
+
+# Generated renders and output
+/media/
+projects/*/renders/
+projects/*/media/
+output/

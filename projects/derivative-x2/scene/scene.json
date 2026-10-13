@@ -1,0 +1,86 @@
+{
+  "template_file": "secant_tangent_scene.py",
+  "template_sha256": "9eafd1479ca8eef1d5ee964898c016617d7ca97b974a22d419976edf8d3d9530",
+  "scene_class": "SecantTangentTemplate",
+  "storyboard": {
+    "schema_version": 1,
+    "template": "secant_tangent",
+    "topic": "Derivative as the limit of secants",
+    "function": "x**2",
+    "x0": 1.0,
+    "y0": 1.0,
+    "h_start": 1.5,
+    "h_end": 0.01,
+    "derivative": 2.0,
+    "tangent_intercept": -1.0,
+    "function_label": "f(x) = x²",
+    "point_label": "P (1, 1)",
+    "secant_slope_label": "Slope = 2 + h",
+    "tangent_label": "Tangent: y = 2x − 1",
+    "axes": {
+      "x_min": -1.0,
+      "x_max": 3.0,
+      "x_step": 1.0,
+      "y_min": -1.0,
+      "y_max": 10.0,
+      "y_step": 2.0
+    },
+    "beats": [
+      {
+        "name": "title",
+        "description": "Show the topic as the title",
+        "run_time": 1.0
+      },
+      {
+        "name": "axes",
+        "description": "Draw the coordinate axes",
+        "run_time": 1.5
+      },
+      {
+        "name": "curve",
+        "description": "Draw the curve and its label",
+        "run_time": 1.5
+      },
+      {
+        "name": "point",
+        "description": "Mark the point P = (x0, f(x0))",
+        "run_time": 1.0
+      },
+      {
+        "name": "secant",
+        "description": "Add Q = (x0 + h, f(x0 + h)) and the secant PQ",
+        "run_time": 1.5
+      },
+      {
+        "name": "secant_pause",
+        "description": "Let the viewer read the slope",
+        "run_time": 1.0
+      },
+      {
+        "name": "shrink",
+        "description": "Shrink h toward 0; Q slides to P",
+        "run_time": 6.0
+      },
+      {
+        "name": "shrink_pause",
+        "description": "Pause at the smallest h",
+        "run_time": 1.0
+      },
+      {
+        "name": "tangent",
+        "description": "Replace the secant with the tangent line",
+        "run_time": 1.5
+      },
+      {
+        "name": "tangent_label",
+        "description": "Write the tangent equation",
+        "run_time": 1.0
+      },
+      {
+        "name": "hold",
+        "description": "Hold the final frame",
+        "run_time": 2.0
+      }
+    ]
+  }
+}
