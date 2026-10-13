@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "video": "renders/secant_tangent.mp4",
+  "checks": [
+    {
+      "name": "video_file",
+      "status": "pass",
+      "detail": "320118 bytes"
+    },
+    {
+      "name": "video_decodes",
+      "status": "pass",
+      "detail": "301 frames at 15.0005 fps"
+    },
+    {
+      "name": "resolution",
+      "status": "pass",
+      "detail": "480x854 (expected 480x854, portrait)"
+    },
+    {
+      "name": "duration",
+      "status": "pass",
+      "detail": "20.07 s (storyboard 20.00 s ± 1, limits 5–60 s)"
+    },
+    {
+      "name": "frames_not_blank",
+      "status": "pass",
+      "detail": "visible content in sampled frames: 3.5%, 5.2%, 5.3%"
+    },
+    {
+      "name": "derivative",
+      "status": "pass",
+      "detail": "f'(1) storyboard=2, exact=2, numeric=2.000000"
+    },
+    {
+      "name": "tangent_line",
+      "status": "pass",
+      "detail": "expected Tangent: y = 2x − 1, storyboard says 'Tangent: y = 2x − 1' (intercept -1)"
+    },
+    {
+      "name": "secant_converges",
+      "status": "pass",
+      "detail": "|secant − f'| goes from 1.5000 (h=1.5) to 0.0100 (h=0.01)"
+    },
+    {
+      "name": "secant_formula",
+      "status": "pass",
+      "detail": "on-screen 'Slope = 2 + h' matches the difference quotient (max error 8.9e-16) and equals f'(x0) at h = 0"
+    },
+    {
+      "name": "rendered_values",
+      "status": "pass",
+      "detail": "drawn point, tangent, final h and labels match the storyboard"
+    }
+  ]
+}

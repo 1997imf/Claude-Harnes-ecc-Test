@@ -17,6 +17,11 @@ H_END = 0.01  # smallest h shown; h = 0 is undefined because the slope divides b
 X0_LIMIT = 3.0
 H_START_MAX = 3.0
 TOPIC_MAX_LENGTH = 120
+OBJECTIVE_MAX_LENGTH = 200
+
+VideoFormat = Literal["landscape", "portrait"]
+# Pixel size per format at the MVP's low render quality (Manim -ql, 15 fps).
+RESOLUTIONS: dict[str, tuple[int, int]] = {"landscape": (854, 480), "portrait": (480, 854)}
 
 
 class BriefError(ValueError):
@@ -32,6 +37,8 @@ class Brief(_Frozen):
     function: str
     x0: float = Field(ge=-X0_LIMIT, le=X0_LIMIT, allow_inf_nan=False)
     h_start: float = Field(gt=H_END, le=H_START_MAX, allow_inf_nan=False)
+    format: VideoFormat = "landscape"
+    objective: str | None = Field(default=None, max_length=OBJECTIVE_MAX_LENGTH)
 
     @field_validator("x0", "h_start", mode="before")
     @classmethod
@@ -69,12 +76,16 @@ class Beat(_Frozen):
     name: str
     description: str
     run_time: float = Field(gt=0)
+    caption: str = ""  # on-screen explanation shown during this beat ("" keeps the previous one)
+    narration: str = ""  # script line for future voice-over; not rendered yet
 
 
 class Storyboard(_Frozen):
-    schema_version: Literal[1] = 1
+    schema_version: Literal[2] = 2
     template: Literal["secant_tangent"]
+    format: VideoFormat
     topic: str
+    learning_objective: str
     function: str
     x0: float
     y0: float
@@ -82,6 +93,7 @@ class Storyboard(_Frozen):
     h_end: float
     derivative: float
     tangent_intercept: float
+    secant_coefficients: tuple[float, float, float]  # secant slope = a + b*h + c*h^2
     function_label: str
     point_label: str
     secant_slope_label: str
@@ -94,11 +106,18 @@ class Storyboard(_Frozen):
         return sum(beat.run_time for beat in self.beats)
 
     def run_time(self, beat_name: str) -> float:
-        return next(beat.run_time for beat in self.beats if beat.name == beat_name)
+        return self.beat(beat_name).run_time
+
+    def beat(self, beat_name: str) -> Beat:
+        return next(beat for beat in self.beats if beat.name == beat_name)
+
+    @property
+    def resolution(self) -> tuple[int, int]:
+        return RESOLUTIONS[self.format]
 
 
 class SceneParams(_Frozen):
-    """What the generate stage hands to the Manim template."""
+    """What the render stage hands to the Manim template."""
 
     template_file: str
     template_sha256: str
@@ -127,6 +146,21 @@ class QAReport(_Frozen):
     passed: bool
     video: str
     checks: tuple[CheckResult, ...]
+
+
+# Platform limits (YouTube title 100 chars, description 5000; Instagram caption 2200, 30 hashtags).
+class PublishMetadata(_Frozen):
+    title: str = Field(min_length=1, max_length=100)
+    description: str = Field(max_length=5000)
+    tags: tuple[str, ...]
+    hashtags: tuple[str, ...] = Field(max_length=30)
+    instagram_caption: str = Field(max_length=2200)
+    video: str
+    format: VideoFormat
+    width: int
+    height: int
+    duration_seconds: float
+    qa_passed: bool
 
 
 def _format_validation_error(error: ValidationError) -> str:

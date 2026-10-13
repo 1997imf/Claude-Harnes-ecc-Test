@@ -1,0 +1,59 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/slope-x3-at-1-portrait/brief.json",
+  "brief": {
+    "topic": "How steep is x\u00b3 at x = 1?",
+    "function": "x**3",
+    "x0": 1.0,
+    "h_start": 1.0,
+    "format": "portrait"
+  },
+  "brief_sha256": "9427bfda5deed8204fb610a0f83d8329544ead58fd0fcac35319357182545073",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "6222ce5aff23c6176c988015130a704e248fb382edbd2c83e68ddf4db12ce229",
+      "started_at": "2026-10-13T20:12:08+00:00",
+      "finished_at": "2026-10-13T20:12:08+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "fb1c4e11d95d4ed84df2a2900a09e7763b7bc95fdef0a7c2025ffccec1e66bfb",
+      "started_at": "2026-10-13T20:12:08+00:00",
+      "finished_at": "2026-10-13T20:12:19+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/secant_tangent.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "d496a7bbaf1062ede18cf29b652730a5454005ec23c1f3705b13b99fd21a1f02",
+      "started_at": "2026-10-13T20:12:19+00:00",
+      "finished_at": "2026-10-13T20:12:19+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "fe0ec7b1f3ce365e7ec5172d0d6712be9ae6be36fdaa8cabe7263b01dd3ccf2f",
+      "started_at": "2026-10-13T20:12:19+00:00",
+      "finished_at": "2026-10-13T20:12:19+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T20:12:19+00:00"
+}

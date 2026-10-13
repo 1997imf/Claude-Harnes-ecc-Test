@@ -4,14 +4,15 @@ projects/<slug>/
 ├── brief.json            input written by you
 ├── manifest.json         pipeline state
 ├── storyboard.json       plan stage
-├── scene/scene.json      generate stage (parameters for the Manim template)
+├── scene/scene.json      render stage (parameters for the Manim template)
 ├── renders/              render stage (git-ignored)
 │   ├── secant_tangent.mp4
 │   ├── render_facts.json
 │   ├── render.log
 │   └── manim_media/      Manim's own working files
 ├── qa_report.json        quality_check stage
-└── preview.html          package stage
+├── preview.html          package stage
+└── metadata.json         package stage (title, description, tags for publishing)
 """
 
 from dataclasses import dataclass
@@ -75,6 +76,10 @@ class ProjectPaths:
     @property
     def preview(self) -> Path:
         return self.project_dir / "preview.html"
+
+    @property
+    def metadata(self) -> Path:
+        return self.project_dir / "metadata.json"
 
     def relative(self, path: Path) -> str:
         """Path relative to the project folder, as stored in the manifest."""

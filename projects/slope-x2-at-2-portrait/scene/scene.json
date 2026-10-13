@@ -1,0 +1,115 @@
+{
+  "template_file": "secant_tangent_scene.py",
+  "template_sha256": "647d14c7a9eda9d434a490438a5bc18470321355586f28ce3ebb75bfa007d451",
+  "scene_class": "SecantTangentTemplate",
+  "storyboard": {
+    "schema_version": 2,
+    "template": "secant_tangent",
+    "format": "portrait",
+    "topic": "How steep is x² at x = 2?",
+    "learning_objective": "See why the slope of x² at x = 2 is 4, by watching secant lines turn into the tangent line.",
+    "function": "x**2",
+    "x0": 2.0,
+    "y0": 4.0,
+    "h_start": 1.0,
+    "h_end": 0.01,
+    "derivative": 4.0,
+    "tangent_intercept": -4.0,
+    "secant_coefficients": [
+      4.0,
+      1.0,
+      0.0
+    ],
+    "function_label": "f(x) = x²",
+    "point_label": "P (2, 4)",
+    "secant_slope_label": "Slope = 4 + h",
+    "tangent_label": "Tangent: y = 4x − 4",
+    "axes": {
+      "x_min": -1.0,
+      "x_max": 4.0,
+      "x_step": 1.0,
+      "y_min": -1.0,
+      "y_max": 17.0,
+      "y_step": 2.0
+    },
+    "beats": [
+      {
+        "name": "title",
+        "description": "Show the topic as the title",
+        "run_time": 1.0,
+        "caption": "",
+        "narration": ""
+      },
+      {
+        "name": "axes",
+        "description": "Draw the coordinate axes",
+        "run_time": 1.5,
+        "caption": "",
+        "narration": ""
+      },
+      {
+        "name": "curve",
+        "description": "Draw the curve and its label",
+        "run_time": 1.5,
+        "caption": "Our curve: f(x) = x²",
+        "narration": "Here is the curve f(x) = x²."
+      },
+      {
+        "name": "point",
+        "description": "Mark the point P = (x0, f(x0))",
+        "run_time": 1.0,
+        "caption": "Zoom in on P = (2, 4)",
+        "narration": "We want the steepness of the curve exactly at the point P = (2, 4)."
+      },
+      {
+        "name": "secant",
+        "description": "Add Q = (x0 + h, f(x0 + h)) and the secant PQ",
+        "run_time": 1.5,
+        "caption": "Q sits h to the right of P",
+        "narration": "Pick a second point Q, a distance h to the right, and draw the line through P and Q."
+      },
+      {
+        "name": "secant_pause",
+        "description": "Let the viewer read the slope",
+        "run_time": 1.5,
+        "caption": "Secant slope = (f(x₀+h) − f(x₀)) / h",
+        "narration": "The slope of this secant line works out to Slope = 4 + h."
+      },
+      {
+        "name": "shrink",
+        "description": "Shrink h toward 0; Q slides to P",
+        "run_time": 6.0,
+        "caption": "Now let h shrink toward 0",
+        "narration": "Now slide Q toward P by shrinking h."
+      },
+      {
+        "name": "shrink_pause",
+        "description": "Pause at the smallest h",
+        "run_time": 1.5,
+        "caption": "At h = 0.01: slope = 4.01",
+        "narration": "With h = 0.01 the secant slope is already 4.01."
+      },
+      {
+        "name": "tangent",
+        "description": "Replace the secant with the tangent line",
+        "run_time": 1.5,
+        "caption": "The secants become the tangent",
+        "narration": "In the limit, the secant lines become the tangent line."
+      },
+      {
+        "name": "tangent_label",
+        "description": "Write the tangent equation",
+        "run_time": 1.0,
+        "caption": "So f′(2) = 4",
+        "narration": "So the derivative at x = 2 is 4: the slope of the tangent line."
+      },
+      {
+        "name": "hold",
+        "description": "Hold the final frame",
+        "run_time": 2.0,
+        "caption": "",
+        "narration": ""
+      }
+    ]
+  }
+}

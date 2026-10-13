@@ -1,0 +1,7 @@
+{
+  "topic": "How steep is x² at x = 2?",
+  "function": "x**2",
+  "x0": 2.0,
+  "h_start": 1.0,
+  "format": "portrait"
+}

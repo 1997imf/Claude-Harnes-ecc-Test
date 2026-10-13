@@ -13,6 +13,7 @@ from pydantic import ValidationError
 
 from pipeline.functions import (
     format_line_equation,
+    format_secant_label,
     get_function,
     numeric_derivative,
     secant_slope,
@@ -23,7 +24,6 @@ from pipeline.runner import StageError
 from pipeline.schemas import CheckResult, QAReport, RenderFacts, Storyboard
 from pipeline.stages._io import read_model, write_model
 
-EXPECTED_SIZE = (854, 480)
 MIN_DURATION_SECONDS = 5.0
 MAX_DURATION_SECONDS = 60.0
 DURATION_TOLERANCE_SECONDS = 1.0
@@ -89,9 +89,10 @@ def inspect_video(video: Path) -> tuple[CheckResult, VideoInfo | None]:
     return _check("video_decodes", True, f"{info.frame_count} frames at {info.fps:g} fps"), info
 
 
-def check_resolution(info: VideoInfo) -> CheckResult:
-    size = (info.width, info.height)
-    return _check("resolution", size == EXPECTED_SIZE, f"{size[0]}x{size[1]} (expected 854x480)")
+def check_resolution(info: VideoInfo, storyboard: Storyboard) -> CheckResult:
+    size, expected = (info.width, info.height), storyboard.resolution
+    return _check("resolution", size == expected,
+                  f"{size[0]}x{size[1]} (expected {expected[0]}x{expected[1]}, {storyboard.format})")
 
 
 def check_duration(info: VideoInfo, storyboard: Storyboard) -> CheckResult:
@@ -121,6 +122,11 @@ def check_math(storyboard: Storyboard) -> list[CheckResult]:
     start_error = abs(secant_slope(fn, x0, storyboard.h_start) - exact)
     end_error = abs(secant_slope(fn, x0, storyboard.h_end) - exact)
     expected_label = f"Tangent: {format_line_equation(tangent)}"
+    a, b, c = storyboard.secant_coefficients
+    formula_errors = [
+        abs(a + b * h + c * h * h - secant_slope(fn, x0, h))
+        for h in (storyboard.h_start, storyboard.h_start / 3, storyboard.h_end)
+    ]
     return [
         _check("derivative",
                abs(storyboard.derivative - exact) <= MATH_TOLERANCE
@@ -136,6 +142,12 @@ def check_math(storyboard: Storyboard) -> list[CheckResult]:
                end_error < start_error and end_error <= SECANT_CONVERGENCE_TOLERANCE,
                f"|secant − f'| goes from {start_error:.4f} (h={storyboard.h_start:g}) "
                f"to {end_error:.4f} (h={storyboard.h_end:g})"),
+        _check("secant_formula",
+               max(formula_errors) <= MATH_TOLERANCE
+               and storyboard.secant_slope_label == format_secant_label(storyboard.secant_coefficients)
+               and abs(a - exact) <= MATH_TOLERANCE,
+               f"on-screen {storyboard.secant_slope_label!r} matches the difference quotient "
+               f"(max error {max(formula_errors):.1e}) and equals f'(x0) at h = 0"),
     ]
 
 
@@ -152,6 +164,7 @@ def _fact_mismatches(storyboard: Storyboard, facts: RenderFacts) -> list[str]:
         problems.append(f"final h {facts.final_h:g}, expected {storyboard.h_end:g}")
     expected_labels = {storyboard.function_label, storyboard.point_label,
                        storyboard.secant_slope_label, storyboard.tangent_label}
+    expected_labels |= {beat.caption for beat in storyboard.beats if beat.caption}
     missing = expected_labels - set(facts.labels)
     if missing:
         problems.append(f"missing labels: {sorted(missing)}")
@@ -178,7 +191,7 @@ def run_quality_checks(video: Path, storyboard: Storyboard, facts_path: Path) ->
         skipped = "skipped: video could not be decoded"
         checks += [_check(name, False, skipped) for name in ("resolution", "duration", "frames_not_blank")]
     else:
-        checks += [check_resolution(info), check_duration(info, storyboard), check_frames(info)]
+        checks += [check_resolution(info, storyboard), check_duration(info, storyboard), check_frames(info)]
     checks += check_math(storyboard)
     checks.append(check_rendered_values(storyboard, facts_path))
     passed = all(check.status == "pass" for check in checks)

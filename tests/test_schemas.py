@@ -44,7 +44,7 @@ def test_missing_required_field_is_rejected(missing):
 @pytest.mark.parametrize(
     "changes, message",
     [
-        ({"function": "x**3"}, "Unsupported function"),
+        ({"function": "x**4"}, "Unsupported function"),
         ({"function": "__import__('os')"}, "Unsupported function"),
         ({"x0": 10}, "less than or equal to 3"),
         ({"x0": True}, "must be a number"),

@@ -22,17 +22,21 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 TEMPLATE_FILE = REPO_ROOT / "pipeline" / "templates" / "secant_tangent_scene.py"
 SCENE_CLASS = "SecantTangentTemplate"
 RENDER_TIMEOUT_SECONDS = 600
-QUALITY = "l"  # 854x480 at 15 fps
+RENDER_MAX_ATTEMPTS = 2  # one retry after clearing Manim's working files; no code is changed
+QUALITY = "l"  # 15 fps; pixel size comes from the storyboard format
 LOG_TAIL_LINES = 15
 PARAMS_ENV = "PIPELINE_SCENE_PARAMS"
 FACTS_ENV = "PIPELINE_RENDER_FACTS"
 SECRET_MARKERS = ("KEY", "TOKEN", "SECRET", "PASSWORD", "CREDENTIAL")
 
 
-def build_render_command(template_path: Path, media_dir: Path) -> list[str]:
+def build_render_command(
+    template_path: Path, media_dir: Path, resolution: tuple[int, int] = (854, 480)
+) -> list[str]:
     return [
         sys.executable, "-m", "manim", "render",
         "--quality", QUALITY,
+        "--resolution", f"{resolution[0]},{resolution[1]}",
         "--format", "mp4",
         "--media_dir", str(media_dir),
         "--output_file", Path(VIDEO_FILENAME).stem,
@@ -63,18 +67,19 @@ def _clear_previous_outputs(paths: ProjectPaths) -> None:
     paths.renders_dir.mkdir(parents=True, exist_ok=True)
 
 
-def _write_log(paths: ProjectPaths, command: list[str], stdout: str, stderr: str) -> None:
-    paths.render_log.write_text(
-        f"$ {' '.join(command)}\n\n--- stdout ---\n{stdout}\n--- stderr ---\n{stderr}\n",
-        encoding="utf-8",
-    )
+def _write_log(paths: ProjectPaths, command: list[str], stdout: str, stderr: str, attempt: int) -> None:
+    with paths.render_log.open("a", encoding="utf-8") as log:
+        log.write(
+            f"=== attempt {attempt}/{RENDER_MAX_ATTEMPTS}\n$ {' '.join(command)}\n\n"
+            f"--- stdout ---\n{stdout}\n--- stderr ---\n{stderr}\n"
+        )
 
 
 def _tail(text: str) -> str:
     return "\n".join(text.strip().splitlines()[-LOG_TAIL_LINES:])
 
 
-def write_scene_params(paths: ProjectPaths) -> None:
+def write_scene_params(paths: ProjectPaths) -> Storyboard:
     storyboard = read_model(paths.storyboard, Storyboard)
     params = SceneParams(
         template_file=TEMPLATE_FILE.name,
@@ -83,12 +88,25 @@ def write_scene_params(paths: ProjectPaths) -> None:
         storyboard=storyboard,
     )
     write_model(paths.scene_params, params)
+    return storyboard
 
 
 def run(paths: ProjectPaths) -> None:
     _clear_previous_outputs(paths)
-    write_scene_params(paths)
-    command = build_render_command(TEMPLATE_FILE, paths.manim_media_dir)
+    storyboard = write_scene_params(paths)
+    command = build_render_command(TEMPLATE_FILE, paths.manim_media_dir, storyboard.resolution)
+    errors = []
+    for attempt in range(1, RENDER_MAX_ATTEMPTS + 1):
+        shutil.rmtree(paths.manim_media_dir, ignore_errors=True)  # stale partial files cause retries to fail
+        error = _render_once(paths, command, attempt)
+        if error is None:
+            return
+        errors.append(f"attempt {attempt}: {error}")
+    raise StageError(f"Render failed after {RENDER_MAX_ATTEMPTS} attempts.\n" + "\n".join(errors))
+
+
+def _render_once(paths: ProjectPaths, command: list[str], attempt: int) -> str | None:
+    """Run Manim once; return an error message, or None after copying the MP4 into place."""
     try:
         result = subprocess.run(
             command,
@@ -100,14 +118,12 @@ def run(paths: ProjectPaths) -> None:
             check=False,
         )
     except subprocess.TimeoutExpired as error:
-        _write_log(paths, command, str(error.stdout or ""), str(error.stderr or ""))
-        raise StageError(
-            f"Manim render timed out after {RENDER_TIMEOUT_SECONDS} s. Log: {paths.render_log}"
-        ) from error
+        _write_log(paths, command, str(error.stdout or ""), str(error.stderr or ""), attempt)
+        return f"Manim render timed out after {RENDER_TIMEOUT_SECONDS} s. Log: {paths.render_log}"
 
-    _write_log(paths, command, result.stdout, result.stderr)
+    _write_log(paths, command, result.stdout, result.stderr, attempt)
     if result.returncode != 0:
-        raise StageError(
+        return (
             f"Manim failed with exit code {result.returncode}. Last log lines:\n"
             f"{_tail(result.stderr or result.stdout)}\nFull log: {paths.render_log}"
         )
@@ -117,11 +133,12 @@ def run(paths: ProjectPaths) -> None:
         if "partial_movie_files" not in path.parts
     )
     if not produced:
-        raise StageError(
+        return (
             f"Manim exited successfully but no MP4 named {VIDEO_FILENAME} was found in "
             f"{paths.manim_media_dir}. Log: {paths.render_log}"
         )
     shutil.copy2(produced[0], paths.video)
+    return None
 
 
 def validate(paths: ProjectPaths) -> None:

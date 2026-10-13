@@ -30,7 +30,7 @@ def test_get_function_ignores_whitespace():
 
 @pytest.mark.parametrize(
     "expression",
-    ["x**3", "sin(x)", "__import__('os').system('ls')", "", "x^2"],
+    ["x**4", "sin(x)", "__import__('os').system('ls')", "", "x^2"],
 )
 def test_get_function_rejects_unsupported_expressions(expression):
     with pytest.raises(ValueError, match="Unsupported function"):
@@ -38,8 +38,8 @@ def test_get_function_rejects_unsupported_expressions(expression):
 
 
 def test_unsupported_function_error_lists_supported_functions():
-    with pytest.raises(ValueError, match=r"Supported: x\*\*2"):
-        get_function("x**3")
+    with pytest.raises(ValueError, match=r"Supported: x\*\*2, x\*\*3"):
+        get_function("x**4")
 
 
 @pytest.mark.parametrize("x0, h", [(1.0, 1.5), (1.0, 0.01), (-2.0, 0.5), (0.0, 1.0)])
@@ -119,6 +119,23 @@ def test_secant_label_for_square_shows_two_x0_plus_h():
     assert fn.secant_slope_label(1.0) == "Slope = 2 + h"
     assert fn.secant_slope_label(-2.0) == "Slope = −4 + h"
     assert fn.secant_slope_label(0.0) == "Slope = h"
+
+
+@pytest.mark.parametrize(
+    "x0, label", [(1.0, "Slope = 3 + 3h + h²"), (-1.0, "Slope = 3 − 3h + h²"), (0.0, "Slope = h²")]
+)
+def test_secant_label_for_cube(x0, label):
+    assert get_function("x**3").secant_slope_label(x0) == label
+
+
+@pytest.mark.parametrize("expression", ["x**2", "x**3"])
+@pytest.mark.parametrize("x0", [-2.0, -1.0, 0.0, 1.0, 2.5])
+def test_secant_coefficients_match_the_actual_secant_slope(expression, x0):
+    # The on-screen formula must agree with the real difference quotient.
+    fn = get_function(expression)
+    a, b, c = fn.secant_coefficients(x0)
+    for h in (1.5, 0.3, 0.01):
+        assert a + b * h + c * h * h == pytest.approx(secant_slope(fn, x0, h))
 
 
 def test_square_is_finite_for_supported_range():

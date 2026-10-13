@@ -19,7 +19,11 @@ class SupportedFunction:
     label: str  # on-screen label, plain Text (no LaTeX)
     f: Callable[[float], float]
     derivative: Callable[[float], float]
-    secant_slope_label: Callable[[float], str]  # x0 -> e.g. "Slope = 2 + h"
+    # x0 -> (a, b, c) such that the secant slope is a + b*h + c*h^2 (exact for these polynomials)
+    secant_coefficients: Callable[[float], tuple[float, float, float]]
+
+    def secant_slope_label(self, x0: float) -> str:
+        return format_secant_label(self.secant_coefficients(x0))
 
 
 class LineEquation(NamedTuple):
@@ -43,12 +47,19 @@ def _signed_term(value: float) -> str:
     return f" {sign} {format_number(abs(value))}"
 
 
-def _square_secant_label(x0: float) -> str:
-    # For f(x) = x^2: ((x0 + h)^2 - x0^2) / h = 2*x0 + h
-    constant = 2 * x0
-    if abs(constant) < ZERO_TOLERANCE:
-        return "Slope = h"
-    return f"Slope = {format_number(constant).replace('-', MINUS)} + h"
+def format_secant_label(coefficients: tuple[float, float, float]) -> str:
+    """(2, 1, 0) -> "Slope = 2 + h"; (3, -3, 1) -> "Slope = 3 − 3h + h²"."""
+    terms = []
+    for value, suffix in zip(coefficients, ("", "h", "h²"), strict=True):
+        if abs(value) < ZERO_TOLERANCE:
+            continue
+        magnitude = format_number(abs(value))
+        body = suffix if suffix and magnitude == "1" else f"{magnitude}{suffix}"
+        if not terms:
+            terms.append(f"{MINUS}{body}" if value < 0 else body)
+        else:
+            terms.append(f" {MINUS if value < 0 else '+'} {body}")
+    return "Slope = " + ("".join(terms) or "0")
 
 
 SUPPORTED_FUNCTIONS: dict[str, SupportedFunction] = {
@@ -57,7 +68,16 @@ SUPPORTED_FUNCTIONS: dict[str, SupportedFunction] = {
         label="f(x) = x²",
         f=lambda x: x * x,
         derivative=lambda x: 2 * x,
-        secant_slope_label=_square_secant_label,
+        # ((x0 + h)^2 - x0^2) / h = 2*x0 + h
+        secant_coefficients=lambda x0: (2 * x0, 1.0, 0.0),
+    ),
+    "x**3": SupportedFunction(
+        expression="x**3",
+        label="f(x) = x³",
+        f=lambda x: x * x * x,
+        derivative=lambda x: 3 * x * x,
+        # ((x0 + h)^3 - x0^3) / h = 3*x0^2 + 3*x0*h + h^2
+        secant_coefficients=lambda x0: (3 * x0 * x0, 3 * x0, 1.0),
     ),
 }
 

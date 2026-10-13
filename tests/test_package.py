@@ -39,6 +39,20 @@ def test_preview_flags_failed_checks():
     assert "Some checks failed" in html
 
 
+def test_metadata_fits_platform_limits_and_tags_shorts():
+    from pipeline.stages.package import build_metadata
+
+    portrait = STORYBOARD.model_copy(update={"format": "portrait"})
+
+    meta = build_metadata(portrait, _report(), 480, 854, 20.07)
+
+    assert meta.title == STORYBOARD.topic and len(meta.title) <= 100
+    assert "#shorts" in meta.hashtags and len(meta.instagram_caption) <= 2200
+    assert "f′(1) = 2" in meta.description
+    assert (meta.width, meta.height, meta.duration_seconds) == (480, 854, 20.07)
+    assert "#shorts" not in build_metadata(STORYBOARD, _report(), 854, 480, 20.0).hashtags
+
+
 def test_preview_escapes_html_in_user_text():
     board = STORYBOARD.model_copy(update={"topic": "<script>alert(1)</script>"})
 

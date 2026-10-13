@@ -1,0 +1,110 @@
+{
+  "schema_version": 2,
+  "template": "secant_tangent",
+  "format": "portrait",
+  "topic": "Derivative as the limit of secants",
+  "learning_objective": "See why the slope of x² at x = 1 is 2, by watching secant lines turn into the tangent line.",
+  "function": "x**2",
+  "x0": 1.0,
+  "y0": 1.0,
+  "h_start": 1.5,
+  "h_end": 0.01,
+  "derivative": 2.0,
+  "tangent_intercept": -1.0,
+  "secant_coefficients": [
+    2.0,
+    1.0,
+    0.0
+  ],
+  "function_label": "f(x) = x²",
+  "point_label": "P (1, 1)",
+  "secant_slope_label": "Slope = 2 + h",
+  "tangent_label": "Tangent: y = 2x − 1",
+  "axes": {
+    "x_min": -1.0,
+    "x_max": 3.0,
+    "x_step": 1.0,
+    "y_min": -1.0,
+    "y_max": 10.0,
+    "y_step": 2.0
+  },
+  "beats": [
+    {
+      "name": "title",
+      "description": "Show the topic as the title",
+      "run_time": 1.0,
+      "caption": "",
+      "narration": ""
+    },
+    {
+      "name": "axes",
+      "description": "Draw the coordinate axes",
+      "run_time": 1.5,
+      "caption": "",
+      "narration": ""
+    },
+    {
+      "name": "curve",
+      "description": "Draw the curve and its label",
+      "run_time": 1.5,
+      "caption": "Our curve: f(x) = x²",
+      "narration": "Here is the curve f(x) = x²."
+    },
+    {
+      "name": "point",
+      "description": "Mark the point P = (x0, f(x0))",
+      "run_time": 1.0,
+      "caption": "Zoom in on P = (1, 1)",
+      "narration": "We want the steepness of the curve exactly at the point P = (1, 1)."
+    },
+    {
+      "name": "secant",
+      "description": "Add Q = (x0 + h, f(x0 + h)) and the secant PQ",
+      "run_time": 1.5,
+      "caption": "Q sits h to the right of P",
+      "narration": "Pick a second point Q, a distance h to the right, and draw the line through P and Q."
+    },
+    {
+      "name": "secant_pause",
+      "description": "Let the viewer read the slope",
+      "run_time": 1.5,
+      "caption": "Secant slope = (f(x₀+h) − f(x₀)) / h",
+      "narration": "The slope of this secant line works out to Slope = 2 + h."
+    },
+    {
+      "name": "shrink",
+      "description": "Shrink h toward 0; Q slides to P",
+      "run_time": 6.0,
+      "caption": "Now let h shrink toward 0",
+      "narration": "Now slide Q toward P by shrinking h."
+    },
+    {
+      "name": "shrink_pause",
+      "description": "Pause at the smallest h",
+      "run_time": 1.5,
+      "caption": "At h = 0.01: slope = 2.01",
+      "narration": "With h = 0.01 the secant slope is already 2.01."
+    },
+    {
+      "name": "tangent",
+      "description": "Replace the secant with the tangent line",
+      "run_time": 1.5,
+      "caption": "The secants become the tangent",
+      "narration": "In the limit, the secant lines become the tangent line."
+    },
+    {
+      "name": "tangent_label",
+      "description": "Write the tangent equation",
+      "run_time": 1.0,
+      "caption": "So f′(1) = 2",
+      "narration": "So the derivative at x = 1 is 2: the slope of the tangent line."
+    },
+    {
+      "name": "hold",
+      "description": "Hold the final frame",
+      "run_time": 2.0,
+      "caption": "",
+      "narration": ""
+    }
+  ]
+}

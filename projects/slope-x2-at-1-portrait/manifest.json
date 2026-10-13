@@ -1,0 +1,59 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/slope-x2-at-1-portrait/brief.json",
+  "brief": {
+    "topic": "Derivative as the limit of secants",
+    "function": "x**2",
+    "x0": 1.0,
+    "h_start": 1.5,
+    "format": "portrait"
+  },
+  "brief_sha256": "a4f9973b5b30d26b152311d9402ed340817c217807e35479916be496b6ea2c0e",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "96025219fc4af3bc4fc93c41a92f6173dd6c73be2e8dddb12da6bafa6d571d52",
+      "started_at": "2026-10-13T20:11:34+00:00",
+      "finished_at": "2026-10-13T20:11:34+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "5003ab3a801680b5d1bb70bf8c026337b8b81b66ec28c19ab14e1986f62fcf3d",
+      "started_at": "2026-10-13T20:11:34+00:00",
+      "finished_at": "2026-10-13T20:11:45+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/secant_tangent.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "065485066cd98f7e792664daa98cdb6a17d12563350c1d7b7adb71c8edde77a0",
+      "started_at": "2026-10-13T20:11:45+00:00",
+      "finished_at": "2026-10-13T20:11:45+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "984dd0b8339bc1a3b0b775d65963ab1944ae54de12d4ada0fbcd94a8216bd2c2",
+      "started_at": "2026-10-13T20:11:45+00:00",
+      "finished_at": "2026-10-13T20:11:45+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T20:11:45+00:00"
+}

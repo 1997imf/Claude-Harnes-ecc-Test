@@ -29,6 +29,7 @@ def _facts(**changes):
             STORYBOARD.point_label,
             STORYBOARD.secant_slope_label,
             STORYBOARD.tangent_label,
+            *(beat.caption for beat in STORYBOARD.beats if beat.caption),
         ],
     }
     return RenderFacts.model_validate({**values, **changes})

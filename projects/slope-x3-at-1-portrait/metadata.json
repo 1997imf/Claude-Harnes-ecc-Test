@@ -1,0 +1,27 @@
+{
+  "title": "How steep is x³ at x = 1?",
+  "description": "See why the slope of x³ at x = 1 is 3, by watching secant lines turn into the tangent line.\n\n• Here is the curve f(x) = x³.\n• We want the steepness of the curve exactly at the point P = (1, 1).\n• Pick a second point Q, a distance h to the right, and draw the line through P and Q.\n• The slope of this secant line works out to Slope = 3 + 3h + h².\n• Now slide Q toward P by shrinking h.\n• With h = 0.01 the secant slope is already 3.03.\n• In the limit, the secant lines become the tangent line.\n• So the derivative at x = 1 is 3: the slope of the tangent line.\n\nResult: f′(1) = 3 for f(x) = x³.\nAnimated with Manim; the math was checked automatically.\n\n#math #calculus #derivative #learnmath #shorts",
+  "tags": [
+    "math",
+    "calculus",
+    "derivative",
+    "limits",
+    "secant line",
+    "tangent line",
+    "manim"
+  ],
+  "hashtags": [
+    "#math",
+    "#calculus",
+    "#derivative",
+    "#learnmath",
+    "#shorts"
+  ],
+  "instagram_caption": "How steep is x³ at x = 1?\n\nSee why the slope of x³ at x = 1 is 3, by watching secant lines turn into the tangent line.\nResult: f′(1) = 3 for f(x) = x³.\n\n#math #calculus #derivative #learnmath #shorts",
+  "video": "renders/secant_tangent.mp4",
+  "format": "portrait",
+  "width": 480,
+  "height": 854,
+  "duration_seconds": 20.07,
+  "qa_passed": true
+}

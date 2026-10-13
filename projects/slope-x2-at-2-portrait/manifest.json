@@ -1,0 +1,59 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/slope-x2-at-2-portrait/brief.json",
+  "brief": {
+    "topic": "How steep is x\u00b2 at x = 2?",
+    "function": "x**2",
+    "x0": 2.0,
+    "h_start": 1.0,
+    "format": "portrait"
+  },
+  "brief_sha256": "b3142e6768f64bd13145cfa90f0fc4bbc7f5ec9c030b6395421afd608323d119",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "aa9060f46ce57e591b569778a9ef88405813996dc35591cdc8d2d0614d40633c",
+      "started_at": "2026-10-13T20:11:46+00:00",
+      "finished_at": "2026-10-13T20:11:46+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "8addfc8823a01bebb58785c115dee039a8d0e5f5aca10abe1a1bf8da1ef0a381",
+      "started_at": "2026-10-13T20:11:46+00:00",
+      "finished_at": "2026-10-13T20:11:56+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/secant_tangent.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "e16a49be3f367de73ae58781b5e330806cc4a6b93bcd47d42784535f34c6930b",
+      "started_at": "2026-10-13T20:11:56+00:00",
+      "finished_at": "2026-10-13T20:11:56+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "339ab199d5d903f2905e65692a765db285fb7fb0e2e49641661af749feef141b",
+      "started_at": "2026-10-13T20:11:56+00:00",
+      "finished_at": "2026-10-13T20:11:56+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T20:11:56+00:00"
+}

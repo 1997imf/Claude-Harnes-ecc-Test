@@ -100,13 +100,13 @@ def test_run_with_missing_brief_exits_2_with_message(tmp_path, capsys):
 
 
 def test_run_with_invalid_brief_exits_nonzero_and_explains(tmp_path, capsys):
-    paths = write_brief(tmp_path / "bad", {"topic": "t", "function": "x**3", "x0": 1, "h_start": 1})
+    paths = write_brief(tmp_path / "bad", {"topic": "t", "function": "x**4", "x0": 1, "h_start": 1})
 
     exit_code = main(["run", str(paths.brief)])
 
     err = capsys.readouterr().err
     assert exit_code == 1
-    assert "plan" in err and "Unsupported function 'x**3'" in err
+    assert "plan" in err and "Unsupported function 'x**4'" in err
 
 
 def test_run_success_then_status(tmp_path, capsys, fake_stages):

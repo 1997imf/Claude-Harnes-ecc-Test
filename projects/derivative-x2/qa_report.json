@@ -5,27 +5,27 @@
     {
       "name": "video_file",
       "status": "pass",
-      "detail": "235480 bytes"
+      "detail": "253065 bytes"
     },
     {
       "name": "video_decodes",
       "status": "pass",
-      "detail": "287 frames at 15 fps"
+      "detail": "301 frames at 15 fps"
     },
     {
       "name": "resolution",
       "status": "pass",
-      "detail": "854x480 (expected 854x480)"
+      "detail": "854x480 (expected 854x480, landscape)"
     },
     {
       "name": "duration",
       "status": "pass",
-      "detail": "19.13 s (storyboard 19.00 s ± 1, limits 5–60 s)"
+      "detail": "20.07 s (storyboard 20.00 s ± 1, limits 5–60 s)"
     },
     {
       "name": "frames_not_blank",
       "status": "pass",
-      "detail": "visible content in sampled frames: 1.9%, 2.8%, 3.0%"
+      "detail": "visible content in sampled frames: 2.2%, 3.2%, 3.2%"
     },
     {
       "name": "derivative",
@@ -41,6 +41,11 @@
       "name": "secant_converges",
       "status": "pass",
       "detail": "|secant − f'| goes from 1.5000 (h=1.5) to 0.0100 (h=0.01)"
+    },
+    {
+      "name": "secant_formula",
+      "status": "pass",
+      "detail": "on-screen 'Slope = 2 + h' matches the difference quotient (max error 8.9e-16) and equals f'(x0) at h = 0"
     },
     {
       "name": "rendered_values",

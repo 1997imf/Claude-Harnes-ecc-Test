@@ -64,6 +64,26 @@ def test_storyboard_is_deterministic():
     assert build_storyboard(EXAMPLE) == build_storyboard(EXAMPLE)
 
 
+def test_captions_use_computed_values():
+    board = build_storyboard(Brief(topic="t", function="x**3", x0=-1, h_start=1, format="portrait"))
+    captions = {beat.name: beat.caption for beat in board.beats}
+
+    assert captions["tangent_label"] == "So f′(−1) = 3"
+    assert captions["point"] == "Zoom in on P = (−1, −1)"
+    assert board.secant_slope_label == "Slope = 3 − 3h + h²"
+    assert "slope of x³ at x = −1 is 3" in board.learning_objective
+
+
+def test_pre_render_check_rejects_a_wrong_claim():
+    from pipeline.runner import StageError
+    from pipeline.stages.plan import verify_storyboard
+
+    wrong = build_storyboard(EXAMPLE).model_copy(update={"secant_slope_label": "Slope = 3 + h"})
+
+    with pytest.raises(StageError, match="secant_formula"):
+        verify_storyboard(wrong)
+
+
 def test_storyboard_round_trips_through_json():
     board = build_storyboard(EXAMPLE)
 

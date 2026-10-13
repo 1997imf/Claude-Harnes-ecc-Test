@@ -1,0 +1,7 @@
+{
+  "topic": "Derivative as the limit of secants",
+  "function": "x**2",
+  "x0": 1.0,
+  "h_start": 1.5,
+  "format": "portrait"
+}

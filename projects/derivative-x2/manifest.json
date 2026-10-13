@@ -11,9 +11,9 @@
   "stages": {
     "plan": {
       "status": "completed",
-      "input_hash": "c9dbf96ba7484fa64329ecf5bd50a484bb00c981d5f4033a0e1bf8594b1d4ad2",
-      "started_at": "2026-10-13T19:35:55+00:00",
-      "finished_at": "2026-10-13T19:35:55+00:00",
+      "input_hash": "b1d3a3d297d71378293fe8f183bc664d9555293695d7fda9a67dbfa460145fe5",
+      "started_at": "2026-10-13T20:11:23+00:00",
+      "finished_at": "2026-10-13T20:11:23+00:00",
       "artifacts": [
         "storyboard.json"
       ],
@@ -21,9 +21,9 @@
     },
     "render": {
       "status": "completed",
-      "input_hash": "d54ed7091982b1133b084f561e9656eb5faf4e43b9dacc18124ec3e24fcb89f9",
-      "started_at": "2026-10-13T19:35:55+00:00",
-      "finished_at": "2026-10-13T19:36:05+00:00",
+      "input_hash": "2a64fc4c5bb42ed5eacd87ac499c16ef66931cff09d14034bb2a023d05768e78",
+      "started_at": "2026-10-13T20:11:23+00:00",
+      "finished_at": "2026-10-13T20:11:34+00:00",
       "artifacts": [
         "scene/scene.json",
         "renders/secant_tangent.mp4",
@@ -34,9 +34,9 @@
     },
     "quality_check": {
       "status": "completed",
-      "input_hash": "fd8009d8334ddf2e57e20696d1b4f422333e8eb44b1ef032b0b0f52afe3aa757",
-      "started_at": "2026-10-13T19:36:05+00:00",
-      "finished_at": "2026-10-13T19:36:05+00:00",
+      "input_hash": "c05a4a85c94b3763e8f832e2d0de1ff878b6f0f6e37037e497fc156ecbf9164e",
+      "started_at": "2026-10-13T20:11:34+00:00",
+      "finished_at": "2026-10-13T20:11:34+00:00",
       "artifacts": [
         "qa_report.json"
       ],
@@ -44,14 +44,15 @@
     },
     "package": {
       "status": "completed",
-      "input_hash": "d282cdf718779714e8da2c6887e4980b1e08c90ff4b17b6109e7b932f7d0285c",
-      "started_at": "2026-10-13T19:36:05+00:00",
-      "finished_at": "2026-10-13T19:36:05+00:00",
+      "input_hash": "56c062a69c33d5be4d06379f526829a27671df28b82d30812626068ea2df2ffc",
+      "started_at": "2026-10-13T20:11:34+00:00",
+      "finished_at": "2026-10-13T20:11:34+00:00",
       "artifacts": [
+        "metadata.json",
         "preview.html"
       ],
       "error": null
     }
   },
-  "updated_at": "2026-10-13T19:36:05+00:00"
+  "updated_at": "2026-10-13T20:11:34+00:00"
 }
