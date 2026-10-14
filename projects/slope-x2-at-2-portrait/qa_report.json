@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "video": "renders/secant_tangent.mp4",
+  "video": "renders/video.mp4",
   "checks": [
     {
       "name": "video_file",
@@ -50,7 +50,7 @@
     {
       "name": "rendered_values",
       "status": "pass",
-      "detail": "drawn point, tangent, final h and labels match the storyboard"
+      "detail": "drawn values (final_h, point_x, point_y, tangent_intercept, tangent_slope) and all labels/captions match the storyboard"
     }
   ]
 }

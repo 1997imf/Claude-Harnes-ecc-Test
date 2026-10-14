@@ -12,9 +12,9 @@
   "stages": {
     "plan": {
       "status": "completed",
-      "input_hash": "772bb969b15a41da5b91c968739a718d07fce7ac3ad51def356180ee5fb4548a",
-      "started_at": "2026-10-13T20:11:57+00:00",
-      "finished_at": "2026-10-13T20:11:57+00:00",
+      "input_hash": "3b81cf04245d2acd4e5f3a70365fa0bde0e60552511cd8a43a38cd8c7291b131",
+      "started_at": "2026-10-13T21:07:09+00:00",
+      "finished_at": "2026-10-13T21:07:09+00:00",
       "artifacts": [
         "storyboard.json"
       ],
@@ -22,12 +22,12 @@
     },
     "render": {
       "status": "completed",
-      "input_hash": "78f33c207d2b0fd920be23f57f6369dd059d2779959c32f3daab723ab4e849d2",
-      "started_at": "2026-10-13T20:11:57+00:00",
-      "finished_at": "2026-10-13T20:12:07+00:00",
+      "input_hash": "3b501445e5fdbad87af71b373434af8c58e66f8335bdbfc8da869d8e33e33fe3",
+      "started_at": "2026-10-13T21:07:09+00:00",
+      "finished_at": "2026-10-13T21:07:20+00:00",
       "artifacts": [
         "scene/scene.json",
-        "renders/secant_tangent.mp4",
+        "renders/video.mp4",
         "renders/render_facts.json",
         "renders/render.log"
       ],
@@ -35,9 +35,9 @@
     },
     "quality_check": {
       "status": "completed",
-      "input_hash": "b31af477ff05e6d5d6c8aab7691bde97c64f5c04d890b5de9e0dd7d02d92d7ce",
-      "started_at": "2026-10-13T20:12:07+00:00",
-      "finished_at": "2026-10-13T20:12:08+00:00",
+      "input_hash": "51e5111d5f9900ab6d0a91f45b9d89ab29b75bd4afca92ce581825751bab2cf9",
+      "started_at": "2026-10-13T21:07:20+00:00",
+      "finished_at": "2026-10-13T21:07:20+00:00",
       "artifacts": [
         "qa_report.json"
       ],
@@ -45,9 +45,9 @@
     },
     "package": {
       "status": "completed",
-      "input_hash": "2cde662882524f11229f2078c48487241ab18584b7a9ae911ecb81341e7b3289",
-      "started_at": "2026-10-13T20:12:08+00:00",
-      "finished_at": "2026-10-13T20:12:08+00:00",
+      "input_hash": "d531131d4f42f9be6d5b352a851429ae48a014013be9dc6482762fefe964fb9b",
+      "started_at": "2026-10-13T21:07:20+00:00",
+      "finished_at": "2026-10-13T21:07:20+00:00",
       "artifacts": [
         "metadata.json",
         "preview.html"
@@ -55,5 +55,5 @@
       "error": null
     }
   },
-  "updated_at": "2026-10-13T20:12:08+00:00"
+  "updated_at": "2026-10-13T21:07:20+00:00"
 }

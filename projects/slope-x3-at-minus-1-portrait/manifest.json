@@ -1,0 +1,59 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/slope-x3-at-minus-1-portrait/brief.json",
+  "brief": {
+    "topic": "x\u00b3 at x = \u22121: secants to tangent",
+    "function": "x**3",
+    "x0": -1.0,
+    "h_start": 1.0,
+    "format": "portrait"
+  },
+  "brief_sha256": "1ff75e2c0d68badbaccda3cd1b9ddfb44df1590194254dabcc9d76d902fa5fd7",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "d393d12b7b91026040f65d204e98505301b5683d90c714fa435f00eec711e443",
+      "started_at": "2026-10-13T21:07:34+00:00",
+      "finished_at": "2026-10-13T21:07:34+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "ad4da321ef2cede8897eeffcc5dd0277c3aaaeddea9c1144aa233b81534b9a74",
+      "started_at": "2026-10-13T21:07:34+00:00",
+      "finished_at": "2026-10-13T21:07:45+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/video.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "220a61484c41448c7f10a7ec2a6cea50cc9cd7785c73a9cf03673c9d87f3ad16",
+      "started_at": "2026-10-13T21:07:45+00:00",
+      "finished_at": "2026-10-13T21:07:45+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "6ae525333ef556e04114d4c8ab17adcbbecba198d643cda05276b8635a04cd23",
+      "started_at": "2026-10-13T21:07:45+00:00",
+      "finished_at": "2026-10-13T21:07:45+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T21:07:45+00:00"
+}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview: Pythagoras by counting squares</title>
+<style>
+:root { --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --line: #d2d2d7;
+        --pass: #1a7f37; --fail: #c62828; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #161618; --fg: #f5f5f7; --muted: #a1a1a6; --line: #3a3a3c;
+          --pass: #4ac26b; --fail: #ff6b6b; }
+}
+body { margin: 0 auto; max-width: 900px; padding: 24px 16px; background: var(--bg);
+       color: var(--fg); font: 16px/1.5 -apple-system, system-ui, sans-serif; }
+video { width: 100%; border-radius: 8px; background: #000; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.muted { color: var(--muted); }
+.pass { color: var(--pass); font-weight: 600; }
+.fail, .unavailable { color: var(--fail); font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>Pythagoras by counting squares</h1>
+<p class="muted">pythagoras · See that 3² + 4² = 5² by counting the unit squares built on each side of a right triangle. · Result: 3² + 4² = 5² (9 + 16 = 25)</p>
+<video controls src="renders/video.mp4" style="max-height: 80vh"></video>
+<h2>Publishing metadata</h2>
+<p><strong>Pythagoras by counting squares</strong> · 480×854 · 13.53 s</p>
+<pre style="white-space: pre-wrap">See that 3² + 4² = 5² by counting the unit squares built on each side of a right triangle.
+
+• Here is a right triangle with legs 3 and 4 and hypotenuse 5.
+• The square on the leg of length 3 holds 9 unit squares.
+• The square on the leg of length 4 holds 16 unit squares.
+• The square on the hypotenuse, of length 5, holds 25 unit squares.
+• Add the two smaller areas: 9 plus 16 is 25.
+• So 3 squared plus 4 squared equals 5 squared.
+
+Result: 3² + 4² = 5² (9 + 16 = 25).
+Animated with Manim; the math was checked automatically.
+
+#math #geometry #pythagoreantheorem #learnmath #shorts</pre>
+
+<h2>Quality checks: <span class="pass">All checks passed</span></h2>
+<table>
+<tr><th>Check</th><th>Status</th><th>Detail</th></tr>
+<tr><td>video_file</td><td class="pass">pass</td><td>206404 bytes</td></tr>
+<tr><td>video_decodes</td><td class="pass">pass</td><td>203 frames at 15 fps</td></tr>
+<tr><td>resolution</td><td class="pass">pass</td><td>480x854 (expected 480x854, portrait)</td></tr>
+<tr><td>duration</td><td class="pass">pass</td><td>13.53 s (storyboard 13.50 s ± 1, limits 5–60 s)</td></tr>
+<tr><td>frames_not_blank</td><td class="pass">pass</td><td>visible content in sampled frames: 2.4%, 12.4%, 22.2%</td></tr>
+<tr><td>pythagorean_triple</td><td class="pass">pass</td><td>3² + 4² = 25, 5² = 25</td></tr>
+<tr><td>triangle_inequality</td><td class="pass">pass</td><td>sides 3, 4, 5 form a triangle</td></tr>
+<tr><td>equation_label</td><td class="pass">pass</td><td>on-screen &#x27;9 + 16 = 25&#x27; parsed as [9, 16, 25]</td></tr>
+<tr><td>rendered_values</td><td class="pass">pass</td><td>drawn values (area_a, area_b, area_c, cells_a, cells_b, cells_c, hypotenuse, leg_a, leg_b, right_angle_deg) and all labels/captions match the storyboard</td></tr>
+</table>
+<p class="muted">Generated locally by the pipeline. Nothing has been uploaded.</p>
+</body>
+</html>

@@ -1,33 +1,18 @@
 {
-  "schema_version": 2,
-  "template": "secant_tangent",
+  "schema_version": 3,
   "format": "portrait",
   "topic": "How steep is x³ at x = 1?",
   "learning_objective": "See why the slope of x³ at x = 1 is 3, by watching secant lines turn into the tangent line.",
-  "function": "x**3",
-  "x0": 1.0,
-  "y0": 1.0,
-  "h_start": 1.0,
-  "h_end": 0.01,
-  "derivative": 3.0,
-  "tangent_intercept": -2.0,
-  "secant_coefficients": [
-    3.0,
-    3.0,
-    1.0
+  "result": "f′(1) = 3 for f(x) = x³",
+  "tags": [
+    "math",
+    "calculus",
+    "derivative",
+    "limits",
+    "secant line",
+    "tangent line",
+    "manim"
   ],
-  "function_label": "f(x) = x³",
-  "point_label": "P (1, 1)",
-  "secant_slope_label": "Slope = 3 + 3h + h²",
-  "tangent_label": "Tangent: y = 3x − 2",
-  "axes": {
-    "x_min": -1.0,
-    "x_max": 3.0,
-    "x_step": 1.0,
-    "y_min": -2.0,
-    "y_max": 28.0,
-    "y_step": 3.0
-  },
   "beats": [
     {
       "name": "title",
@@ -106,5 +91,30 @@
       "caption": "",
       "narration": ""
     }
-  ]
+  ],
+  "template": "secant_tangent",
+  "function": "x**3",
+  "x0": 1.0,
+  "y0": 1.0,
+  "h_start": 1.0,
+  "h_end": 0.01,
+  "derivative": 3.0,
+  "tangent_intercept": -2.0,
+  "secant_coefficients": [
+    3.0,
+    3.0,
+    1.0
+  ],
+  "function_label": "f(x) = x³",
+  "point_label": "P (1, 1)",
+  "secant_slope_label": "Slope = 3 + 3h + h²",
+  "tangent_label": "Tangent: y = 3x − 2",
+  "axes": {
+    "x_min": -1.0,
+    "x_max": 3.0,
+    "x_step": 1.0,
+    "y_min": -2.0,
+    "y_max": 28.0,
+    "y_step": 3.0
+  }
 }

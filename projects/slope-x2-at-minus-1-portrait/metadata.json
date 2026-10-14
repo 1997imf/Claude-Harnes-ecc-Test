@@ -1,6 +1,6 @@
 {
   "title": "A tangent that slopes downward",
-  "description": "See why the slope of x² at x = −1 is −2, by watching secant lines turn into the tangent line.\n\n• Here is the curve f(x) = x².\n• We want the steepness of the curve exactly at the point P = (−1, 1).\n• Pick a second point Q, a distance h to the right, and draw the line through P and Q.\n• The slope of this secant line works out to Slope = −2 + h.\n• Now slide Q toward P by shrinking h.\n• With h = 0.01 the secant slope is already −1.99.\n• In the limit, the secant lines become the tangent line.\n• So the derivative at x = −1 is −2: the slope of the tangent line.\n\nResult: f′(-1) = -2 for f(x) = x².\nAnimated with Manim; the math was checked automatically.\n\n#math #calculus #derivative #learnmath #shorts",
+  "description": "See why the slope of x² at x = −1 is −2, by watching secant lines turn into the tangent line.\n\n• Here is the curve f(x) = x².\n• We want the steepness of the curve exactly at the point P = (−1, 1).\n• Pick a second point Q, a distance h to the right, and draw the line through P and Q.\n• The slope of this secant line works out to Slope = −2 + h.\n• Now slide Q toward P by shrinking h.\n• With h = 0.01 the secant slope is already −1.99.\n• In the limit, the secant lines become the tangent line.\n• So the derivative at x = −1 is −2: the slope of the tangent line.\n\nResult: f′(−1) = −2 for f(x) = x².\nAnimated with Manim; the math was checked automatically.\n\n#math #calculus #derivative #learnmath #shorts",
   "tags": [
     "math",
     "calculus",
@@ -17,8 +17,8 @@
     "#learnmath",
     "#shorts"
   ],
-  "instagram_caption": "A tangent that slopes downward\n\nSee why the slope of x² at x = −1 is −2, by watching secant lines turn into the tangent line.\nResult: f′(-1) = -2 for f(x) = x².\n\n#math #calculus #derivative #learnmath #shorts",
-  "video": "renders/secant_tangent.mp4",
+  "instagram_caption": "A tangent that slopes downward\n\nSee why the slope of x² at x = −1 is −2, by watching secant lines turn into the tangent line.\nResult: f′(−1) = −2 for f(x) = x².\n\n#math #calculus #derivative #learnmath #shorts",
+  "video": "renders/video.mp4",
   "format": "portrait",
   "width": 480,
   "height": 854,

@@ -11,18 +11,11 @@ from pathlib import Path
 import numpy as np
 from pydantic import ValidationError
 
-from pipeline.functions import (
-    format_line_equation,
-    format_secant_label,
-    get_function,
-    numeric_derivative,
-    secant_slope,
-    tangent_line,
-)
 from pipeline.paths import ProjectPaths
 from pipeline.runner import StageError
-from pipeline.schemas import CheckResult, QAReport, RenderFacts, Storyboard
+from pipeline.schemas import STORYBOARD_ADAPTER, CheckResult, QAReport, RenderFacts
 from pipeline.stages._io import read_model, write_model
+from pipeline.visuals import VISUALS
 
 MIN_DURATION_SECONDS = 5.0
 MAX_DURATION_SECONDS = 60.0
@@ -30,9 +23,7 @@ DURATION_TOLERANCE_SECONDS = 1.0
 SAMPLE_FRACTIONS = (0.25, 0.5, 0.95)
 BLANK_PIXEL_THRESHOLD = 16  # 0-255; darker pixels count as background
 MIN_CONTENT_FRACTION = 0.002  # at least 0.2% of pixels must be visible content
-MATH_TOLERANCE = 1e-6
-DRAWN_TOLERANCE = 1e-3  # drawn geometry goes through screen coordinates
-SECANT_CONVERGENCE_TOLERANCE = 0.1
+DRAWN_TOLERANCE = 1e-3  # relative; drawn geometry goes through screen coordinates
 
 
 @dataclass(frozen=True)
@@ -89,13 +80,13 @@ def inspect_video(video: Path) -> tuple[CheckResult, VideoInfo | None]:
     return _check("video_decodes", True, f"{info.frame_count} frames at {info.fps:g} fps"), info
 
 
-def check_resolution(info: VideoInfo, storyboard: Storyboard) -> CheckResult:
+def check_resolution(info: VideoInfo, storyboard) -> CheckResult:
     size, expected = (info.width, info.height), storyboard.resolution
     return _check("resolution", size == expected,
                   f"{size[0]}x{size[1]} (expected {expected[0]}x{expected[1]}, {storyboard.format})")
 
 
-def check_duration(info: VideoInfo, storyboard: Storyboard) -> CheckResult:
+def check_duration(info: VideoInfo, storyboard) -> CheckResult:
     expected = storyboard.expected_duration
     in_limits = MIN_DURATION_SECONDS <= info.duration <= MAX_DURATION_SECONDS
     matches = abs(info.duration - expected) <= DURATION_TOLERANCE_SECONDS
@@ -113,57 +104,21 @@ def check_frames(info: VideoInfo) -> CheckResult:
     return _check("frames_not_blank", ok, f"visible content in sampled frames: {shown}")
 
 
-def check_math(storyboard: Storyboard) -> list[CheckResult]:
-    fn = get_function(storyboard.function)
-    x0 = storyboard.x0
-    exact = fn.derivative(x0)
-    numeric = numeric_derivative(fn, x0)
-    tangent = tangent_line(fn, x0)
-    start_error = abs(secant_slope(fn, x0, storyboard.h_start) - exact)
-    end_error = abs(secant_slope(fn, x0, storyboard.h_end) - exact)
-    expected_label = f"Tangent: {format_line_equation(tangent)}"
-    a, b, c = storyboard.secant_coefficients
-    formula_errors = [
-        abs(a + b * h + c * h * h - secant_slope(fn, x0, h))
-        for h in (storyboard.h_start, storyboard.h_start / 3, storyboard.h_end)
-    ]
-    return [
-        _check("derivative",
-               abs(storyboard.derivative - exact) <= MATH_TOLERANCE
-               and abs(numeric - exact) <= MATH_TOLERANCE,
-               f"f'({x0:g}) storyboard={storyboard.derivative:g}, exact={exact:g}, numeric={numeric:.6f}"),
-        _check("tangent_line",
-               abs(storyboard.tangent_intercept - tangent.intercept) <= MATH_TOLERANCE
-               and abs(storyboard.y0 - fn.f(x0)) <= MATH_TOLERANCE
-               and storyboard.tangent_label == expected_label,
-               f"expected {expected_label}, storyboard says {storyboard.tangent_label!r} "
-               f"(intercept {storyboard.tangent_intercept:g})"),
-        _check("secant_converges",
-               end_error < start_error and end_error <= SECANT_CONVERGENCE_TOLERANCE,
-               f"|secant − f'| goes from {start_error:.4f} (h={storyboard.h_start:g}) "
-               f"to {end_error:.4f} (h={storyboard.h_end:g})"),
-        _check("secant_formula",
-               max(formula_errors) <= MATH_TOLERANCE
-               and storyboard.secant_slope_label == format_secant_label(storyboard.secant_coefficients)
-               and abs(a - exact) <= MATH_TOLERANCE,
-               f"on-screen {storyboard.secant_slope_label!r} matches the difference quotient "
-               f"(max error {max(formula_errors):.1e}) and equals f'(x0) at h = 0"),
-    ]
+def check_math(storyboard) -> list[CheckResult]:
+    """Topic-specific math checks, from the storyboard's visual."""
+    return VISUALS[storyboard.template].check_math(storyboard)
 
 
-def _fact_mismatches(storyboard: Storyboard, facts: RenderFacts) -> list[str]:
+def _fact_mismatches(storyboard, facts: RenderFacts) -> list[str]:
+    visual = VISUALS[storyboard.template]
     problems = []
-    close = lambda a, b: abs(a - b) <= DRAWN_TOLERANCE  # noqa: E731
-    if not (close(facts.point[0], storyboard.x0) and close(facts.point[1], storyboard.y0)):
-        problems.append(f"point P drawn at {facts.point}, expected ({storyboard.x0:g}, {storyboard.y0:g})")
-    if not close(facts.tangent_slope, storyboard.derivative):
-        problems.append(f"tangent slope drawn {facts.tangent_slope:.4f}, expected {storyboard.derivative:g}")
-    if not close(facts.tangent_intercept, storyboard.tangent_intercept):
-        problems.append(f"tangent intercept drawn {facts.tangent_intercept:.4f}")
-    if not close(facts.final_h, storyboard.h_end):
-        problems.append(f"final h {facts.final_h:g}, expected {storyboard.h_end:g}")
-    expected_labels = {storyboard.function_label, storyboard.point_label,
-                       storyboard.secant_slope_label, storyboard.tangent_label}
+    for name, expected in visual.expected_values(storyboard).items():
+        measured = facts.values.get(name)
+        if measured is None:
+            problems.append(f"{name} was not measured by the template")
+        elif abs(measured - expected) > DRAWN_TOLERANCE * max(1.0, abs(expected)):
+            problems.append(f"{name} drawn as {measured:.4f}, expected {expected:g}")
+    expected_labels = visual.expected_labels(storyboard)
     expected_labels |= {beat.caption for beat in storyboard.beats if beat.caption}
     missing = expected_labels - set(facts.labels)
     if missing:
@@ -171,7 +126,7 @@ def _fact_mismatches(storyboard: Storyboard, facts: RenderFacts) -> list[str]:
     return problems
 
 
-def check_rendered_values(storyboard: Storyboard, facts_path: Path) -> CheckResult:
+def check_rendered_values(storyboard, facts_path: Path) -> CheckResult:
     if not facts_path.is_file():
         return _check("rendered_values", False, f"{facts_path.name} not found")
     try:
@@ -179,11 +134,12 @@ def check_rendered_values(storyboard: Storyboard, facts_path: Path) -> CheckResu
     except ValidationError as error:
         return _check("rendered_values", False, f"{facts_path.name} is invalid: {error}")
     problems = _fact_mismatches(storyboard, facts)
-    detail = "; ".join(problems) or "drawn point, tangent, final h and labels match the storyboard"
+    measured = ", ".join(sorted(VISUALS[storyboard.template].expected_values(storyboard)))
+    detail = "; ".join(problems) or f"drawn values ({measured}) and all labels/captions match the storyboard"
     return _check("rendered_values", not problems, detail)
 
 
-def run_quality_checks(video: Path, storyboard: Storyboard, facts_path: Path) -> QAReport:
+def run_quality_checks(video: Path, storyboard, facts_path: Path) -> QAReport:
     checks = [check_video_file(video)]
     decode_check, info = inspect_video(video)
     checks.append(decode_check)
@@ -199,7 +155,7 @@ def run_quality_checks(video: Path, storyboard: Storyboard, facts_path: Path) ->
 
 
 def run(paths: ProjectPaths) -> None:
-    storyboard = read_model(paths.storyboard, Storyboard)
+    storyboard = read_model(paths.storyboard, STORYBOARD_ADAPTER)
     report = run_quality_checks(paths.video, storyboard, paths.render_facts)
     report = report.model_copy(update={"video": paths.relative(paths.video)})
     write_model(paths.qa_report, report)

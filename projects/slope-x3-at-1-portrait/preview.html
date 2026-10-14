@@ -23,8 +23,8 @@ th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line
 </head>
 <body>
 <h1>How steep is x³ at x = 1?</h1>
-<p class="muted">f(x) = x³ · x₀ = 1 · h: 1 → 0.01 · f′(x₀) = 3 · Tangent: y = 3x − 2</p>
-<video controls src="renders/secant_tangent.mp4" style="max-height: 80vh"></video>
+<p class="muted">secant_tangent · See why the slope of x³ at x = 1 is 3, by watching secant lines turn into the tangent line. · Result: f′(1) = 3 for f(x) = x³</p>
+<video controls src="renders/video.mp4" style="max-height: 80vh"></video>
 <h2>Publishing metadata</h2>
 <p><strong>How steep is x³ at x = 1?</strong> · 480×854 · 20.07 s</p>
 <pre style="white-space: pre-wrap">See why the slope of x³ at x = 1 is 3, by watching secant lines turn into the tangent line.
@@ -55,7 +55,7 @@ Animated with Manim; the math was checked automatically.
 <tr><td>tangent_line</td><td class="pass">pass</td><td>expected Tangent: y = 3x − 2, storyboard says &#x27;Tangent: y = 3x − 2&#x27; (intercept -2)</td></tr>
 <tr><td>secant_converges</td><td class="pass">pass</td><td>|secant − f&#x27;| goes from 4.0000 (h=1) to 0.0301 (h=0.01)</td></tr>
 <tr><td>secant_formula</td><td class="pass">pass</td><td>on-screen &#x27;Slope = 3 + 3h + h²&#x27; matches the difference quotient (max error 8.9e-15) and equals f&#x27;(x0) at h = 0</td></tr>
-<tr><td>rendered_values</td><td class="pass">pass</td><td>drawn point, tangent, final h and labels match the storyboard</td></tr>
+<tr><td>rendered_values</td><td class="pass">pass</td><td>drawn values (final_h, point_x, point_y, tangent_intercept, tangent_slope) and all labels/captions match the storyboard</td></tr>
 </table>
 <p class="muted">Generated locally by the pipeline. Nothing has been uploaded.</p>
 </body>

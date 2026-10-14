@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from pipeline.schemas import Brief, BriefError, load_brief
+from pipeline.schemas import SecantBrief, BriefError, load_brief
 
 VALID_BRIEF = {
     "topic": "Derivative as the limit of secants",
@@ -25,7 +25,7 @@ def _write(tmp_path, content):
 
 
 def test_valid_brief_is_accepted_and_normalized():
-    brief = Brief.model_validate(_brief_with(function=" x ** 2 ", topic="  Secants  "))
+    brief = SecantBrief.model_validate(_brief_with(function=" x ** 2 ", topic="  Secants  "))
 
     assert brief.function == "x**2"
     assert brief.topic == "Secants"
@@ -38,7 +38,7 @@ def test_missing_required_field_is_rejected(missing):
     data = {k: v for k, v in VALID_BRIEF.items() if k != missing}
 
     with pytest.raises(ValueError, match=missing):
-        Brief.model_validate(data)
+        SecantBrief.model_validate(data)
 
 
 @pytest.mark.parametrize(
@@ -58,12 +58,12 @@ def test_missing_required_field_is_rejected(missing):
 )
 def test_invalid_values_are_rejected_with_clear_message(changes, message):
     with pytest.raises(ValueError, match=message):
-        Brief.model_validate(_brief_with(**changes))
+        SecantBrief.model_validate(_brief_with(**changes))
 
 
 def test_nan_is_rejected():
     with pytest.raises(ValueError, match="finite"):
-        Brief.model_validate(_brief_with(x0=float("nan")))
+        SecantBrief.model_validate(_brief_with(x0=float("nan")))
 
 
 def test_load_brief_reads_valid_file(tmp_path):
@@ -94,3 +94,21 @@ def test_load_brief_lists_every_invalid_field(tmp_path):
 def test_load_brief_rejects_non_object_json(tmp_path):
     with pytest.raises(BriefError, match="JSON object"):
         load_brief(_write(tmp_path, "[1, 2]"))
+
+
+@pytest.mark.parametrize(
+    "data, message",
+    [
+        ({"template": "pythagoras", "topic": "t", "a": 2, "b": 3}, "not form a Pythagorean triple"),
+        ({"template": "pythagoras", "topic": "t", "a": 3.5, "b": 4}, "valid integer"),
+        ({"template": "odd_sum", "topic": "t", "n": 20}, "less than or equal to 8"),
+        ({"template": "spirograph", "topic": "t"}, "does not match any of the expected tags"),
+    ],
+)
+def test_other_visual_briefs_are_validated(tmp_path, data, message):
+    with pytest.raises(BriefError, match=message):
+        load_brief(_write(tmp_path, data))
+
+
+def test_brief_without_template_is_still_a_secant_brief(tmp_path):
+    assert load_brief(_write(tmp_path, VALID_BRIEF)).template == "secant_tangent"

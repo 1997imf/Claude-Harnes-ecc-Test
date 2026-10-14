@@ -2,10 +2,10 @@
 
 import pytest
 
-from pipeline.schemas import Brief, Storyboard
+from pipeline.schemas import STORYBOARD_ADAPTER, SecantBrief
 from pipeline.stages.plan import H_END, build_storyboard
 
-EXAMPLE = Brief(topic="Derivative as the limit of secants", function="x**2", x0=1, h_start=1.5)
+EXAMPLE = SecantBrief(topic="Derivative as the limit of secants", function="x**2", x0=1, h_start=1.5)
 
 
 def test_storyboard_contains_correct_math_for_example_brief():
@@ -37,7 +37,7 @@ def test_axes_contain_both_points_and_the_origin():
 
 
 def test_axes_for_negative_x0_still_contain_origin_and_points():
-    board = build_storyboard(Brief(topic="t", function="x**2", x0=-2, h_start=1.5))
+    board = build_storyboard(SecantBrief(topic="t", function="x**2", x0=-2, h_start=1.5))
     axes = board.axes
 
     assert axes.x_min <= -2.0 and axes.x_max >= 0.0
@@ -65,7 +65,7 @@ def test_storyboard_is_deterministic():
 
 
 def test_captions_use_computed_values():
-    board = build_storyboard(Brief(topic="t", function="x**3", x0=-1, h_start=1, format="portrait"))
+    board = build_storyboard(SecantBrief(topic="t", function="x**3", x0=-1, h_start=1, format="portrait"))
     captions = {beat.name: beat.caption for beat in board.beats}
 
     assert captions["tangent_label"] == "So f′(−1) = 3"
@@ -87,4 +87,44 @@ def test_pre_render_check_rejects_a_wrong_claim():
 def test_storyboard_round_trips_through_json():
     board = build_storyboard(EXAMPLE)
 
-    assert Storyboard.model_validate_json(board.model_dump_json()) == board
+    assert STORYBOARD_ADAPTER.validate_json(board.model_dump_json()) == board
+
+
+# --- other visual types ---------------------------------------------------------
+
+from pipeline.schemas import OddSumBrief, PythagorasBrief  # noqa: E402
+
+
+def test_pythagoras_storyboard_has_exact_areas():
+    board = build_storyboard(PythagorasBrief(template="pythagoras", topic="t", a=5, b=12))
+
+    assert (board.c, board.equation_label) == (13, "25 + 144 = 169")
+    assert board.result == "5² + 12² = 13² (25 + 144 = 169)"
+
+
+def test_pythagoras_check_rejects_wrong_equation_label():
+    from pipeline.runner import StageError
+    from pipeline.stages.plan import verify_storyboard
+
+    board = build_storyboard(PythagorasBrief(template="pythagoras", topic="t", a=3, b=4))
+
+    with pytest.raises(StageError, match="equation_label"):
+        verify_storyboard(board.model_copy(update={"equation_label": "9 + 16 = 26"}))
+
+
+def test_odd_sum_storyboard_running_sums():
+    board = build_storyboard(OddSumBrief(template="odd_sum", topic="t", n=4))
+
+    assert board.sum_labels == ("1", "1 + 3 = 4", "1 + 3 + 5 = 9", "1 + 3 + 5 + 7 = 16")
+    assert board.partial_sums == (1, 4, 9, 16)
+
+
+def test_odd_sum_check_rejects_wrong_running_sum():
+    from pipeline.runner import StageError
+    from pipeline.stages.plan import verify_storyboard
+
+    board = build_storyboard(OddSumBrief(template="odd_sum", topic="t", n=3))
+    wrong = board.model_copy(update={"sum_labels": ("1", "1 + 3 = 4", "1 + 3 + 5 = 10")})
+
+    with pytest.raises(StageError, match="sum_labels"):
+        verify_storyboard(wrong)

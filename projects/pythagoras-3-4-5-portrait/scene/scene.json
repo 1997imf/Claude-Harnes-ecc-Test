@@ -1,0 +1,76 @@
+{
+  "template_file": "/Users/20286323/Developer/Claude-Harnes-Test/pipeline/templates/pythagoras_scene.py",
+  "template_sha256": "2b94328bb1437300138a2b16597b97317ac7ce86cc786ea318f43bc428310de2",
+  "scene_class": "PythagorasTemplate",
+  "storyboard": {
+    "schema_version": 3,
+    "format": "portrait",
+    "topic": "Pythagoras by counting squares",
+    "learning_objective": "See that 3² + 4² = 5² by counting the unit squares built on each side of a right triangle.",
+    "result": "3² + 4² = 5² (9 + 16 = 25)",
+    "tags": [
+      "math",
+      "geometry",
+      "pythagorean theorem",
+      "right triangle",
+      "area",
+      "manim"
+    ],
+    "beats": [
+      {
+        "name": "title",
+        "description": "Show the topic",
+        "run_time": 1.0,
+        "caption": "",
+        "narration": ""
+      },
+      {
+        "name": "triangle",
+        "description": "Draw the right triangle and its side lengths",
+        "run_time": 2.0,
+        "caption": "A right triangle with legs 3 and 4",
+        "narration": "Here is a right triangle with legs 3 and 4 and hypotenuse 5."
+      },
+      {
+        "name": "square_a",
+        "description": "Square on leg a, as a grid of unit cells",
+        "run_time": 2.0,
+        "caption": "Leg 3: square of area 3² = 9",
+        "narration": "The square on the leg of length 3 holds 9 unit squares."
+      },
+      {
+        "name": "square_b",
+        "description": "Square on leg b, as a grid of unit cells",
+        "run_time": 2.0,
+        "caption": "Leg 4: square of area 4² = 16",
+        "narration": "The square on the leg of length 4 holds 16 unit squares."
+      },
+      {
+        "name": "square_c",
+        "description": "Square on the hypotenuse, as a grid of unit cells",
+        "run_time": 2.5,
+        "caption": "Hypotenuse 5: area 5² = 25",
+        "narration": "The square on the hypotenuse, of length 5, holds 25 unit squares."
+      },
+      {
+        "name": "equation",
+        "description": "Write the area equation",
+        "run_time": 2.0,
+        "caption": "The two smaller areas add up to the largest",
+        "narration": "Add the two smaller areas: 9 plus 16 is 25."
+      },
+      {
+        "name": "hold",
+        "description": "Hold the final frame",
+        "run_time": 2.0,
+        "caption": "So 3² + 4² = 5²",
+        "narration": "So 3 squared plus 4 squared equals 5 squared."
+      }
+    ],
+    "template": "pythagoras",
+    "a": 3,
+    "b": 4,
+    "c": 5,
+    "equation_label": "9 + 16 = 25"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": 3,
+  "format": "portrait",
+  "topic": "A 5-12-13 right triangle",
+  "learning_objective": "See that 5² + 12² = 13² by counting the unit squares built on each side of a right triangle.",
+  "result": "5² + 12² = 13² (25 + 144 = 169)",
+  "tags": [
+    "math",
+    "geometry",
+    "pythagorean theorem",
+    "right triangle",
+    "area",
+    "manim"
+  ],
+  "beats": [
+    {
+      "name": "title",
+      "description": "Show the topic",
+      "run_time": 1.0,
+      "caption": "",
+      "narration": ""
+    },
+    {
+      "name": "triangle",
+      "description": "Draw the right triangle and its side lengths",
+      "run_time": 2.0,
+      "caption": "A right triangle with legs 5 and 12",
+      "narration": "Here is a right triangle with legs 5 and 12 and hypotenuse 13."
+    },
+    {
+      "name": "square_a",
+      "description": "Square on leg a, as a grid of unit cells",
+      "run_time": 2.0,
+      "caption": "Leg 5: square of area 5² = 25",
+      "narration": "The square on the leg of length 5 holds 25 unit squares."
+    },
+    {
+      "name": "square_b",
+      "description": "Square on leg b, as a grid of unit cells",
+      "run_time": 2.0,
+      "caption": "Leg 12: square of area 12² = 144",
+      "narration": "The square on the leg of length 12 holds 144 unit squares."
+    },
+    {
+      "name": "square_c",
+      "description": "Square on the hypotenuse, as a grid of unit cells",
+      "run_time": 2.5,
+      "caption": "Hypotenuse 13: area 13² = 169",
+      "narration": "The square on the hypotenuse, of length 13, holds 169 unit squares."
+    },
+    {
+      "name": "equation",
+      "description": "Write the area equation",
+      "run_time": 2.0,
+      "caption": "The two smaller areas add up to the largest",
+      "narration": "Add the two smaller areas: 25 plus 144 is 169."
+    },
+    {
+      "name": "hold",
+      "description": "Hold the final frame",
+      "run_time": 2.0,
+      "caption": "So 5² + 12² = 13²",
+      "narration": "So 5 squared plus 12 squared equals 13 squared."
+    }
+  ],
+  "template": "pythagoras",
+  "a": 5,
+  "b": 12,
+  "c": 13,
+  "equation_label": "25 + 144 = 169"
+}

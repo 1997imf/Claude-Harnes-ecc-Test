@@ -1,0 +1,26 @@
+{
+  "title": "Pythagoras by counting squares",
+  "description": "See that 3² + 4² = 5² by counting the unit squares built on each side of a right triangle.\n\n• Here is a right triangle with legs 3 and 4 and hypotenuse 5.\n• The square on the leg of length 3 holds 9 unit squares.\n• The square on the leg of length 4 holds 16 unit squares.\n• The square on the hypotenuse, of length 5, holds 25 unit squares.\n• Add the two smaller areas: 9 plus 16 is 25.\n• So 3 squared plus 4 squared equals 5 squared.\n\nResult: 3² + 4² = 5² (9 + 16 = 25).\nAnimated with Manim; the math was checked automatically.\n\n#math #geometry #pythagoreantheorem #learnmath #shorts",
+  "tags": [
+    "math",
+    "geometry",
+    "pythagorean theorem",
+    "right triangle",
+    "area",
+    "manim"
+  ],
+  "hashtags": [
+    "#math",
+    "#geometry",
+    "#pythagoreantheorem",
+    "#learnmath",
+    "#shorts"
+  ],
+  "instagram_caption": "Pythagoras by counting squares\n\nSee that 3² + 4² = 5² by counting the unit squares built on each side of a right triangle.\nResult: 3² + 4² = 5² (9 + 16 = 25).\n\n#math #geometry #pythagoreantheorem #learnmath #shorts",
+  "video": "renders/video.mp4",
+  "format": "portrait",
+  "width": 480,
+  "height": 854,
+  "duration_seconds": 13.53,
+  "qa_passed": true
+}

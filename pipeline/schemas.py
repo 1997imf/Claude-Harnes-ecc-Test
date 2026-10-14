@@ -2,14 +2,19 @@
 
 Every JSON file a stage reads is validated here first, so malformed input
 stops the pipeline early with a readable message.
+
+Each visualization type ("template") has its own brief and storyboard shape;
+`Brief` and `Storyboard` are unions that pick the right shape from the
+`template` field. A brief without a `template` field is a secant_tangent brief
+(the original format), so older projects keep working.
 """
 
 import json
 import math
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, ValidationError, field_validator
 
 from pipeline.functions import get_function
 
@@ -18,6 +23,9 @@ X0_LIMIT = 3.0
 H_START_MAX = 3.0
 TOPIC_MAX_LENGTH = 120
 OBJECTIVE_MAX_LENGTH = 200
+LEG_MAX = 12  # keeps the unit-cell grids readable (at most 13 x 13 cells on the hypotenuse)
+ODD_SUM_MAX_TERMS = 8
+DEFAULT_TEMPLATE = "secant_tangent"
 
 VideoFormat = Literal["landscape", "portrait"]
 # Pixel size per format at the MVP's low render quality (Manim -ql, 15 fps).
@@ -32,23 +40,12 @@ class _Frozen(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
 
-class Brief(_Frozen):
+# --- briefs (input) -------------------------------------------------------------
+
+class _BriefBase(_Frozen):
     topic: str = Field(max_length=TOPIC_MAX_LENGTH)
-    function: str
-    x0: float = Field(ge=-X0_LIMIT, le=X0_LIMIT, allow_inf_nan=False)
-    h_start: float = Field(gt=H_END, le=H_START_MAX, allow_inf_nan=False)
     format: VideoFormat = "landscape"
     objective: str | None = Field(default=None, max_length=OBJECTIVE_MAX_LENGTH)
-
-    @field_validator("x0", "h_start", mode="before")
-    @classmethod
-    def _require_json_number(cls, value: object) -> object:
-        # JSON true/"1" would otherwise be silently converted to 1.0.
-        if isinstance(value, bool) or not isinstance(value, int | float):
-            raise ValueError("must be a number")
-        if isinstance(value, float) and not math.isfinite(value):
-            raise ValueError("must be a finite number")
-        return value
 
     @field_validator("topic")
     @classmethod
@@ -57,11 +54,58 @@ class Brief(_Frozen):
             raise ValueError("topic must not be empty")
         return value.strip()
 
+
+def _require_json_number(value: object) -> object:
+    # JSON true/"1" would otherwise be silently converted to a number.
+    if isinstance(value, bool) or not isinstance(value, int | float):
+        raise ValueError("must be a number")
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ValueError("must be a finite number")
+    return value
+
+
+class SecantBrief(_BriefBase):
+    template: Literal["secant_tangent"] = "secant_tangent"
+    function: str
+    x0: float = Field(ge=-X0_LIMIT, le=X0_LIMIT, allow_inf_nan=False)
+    h_start: float = Field(gt=H_END, le=H_START_MAX, allow_inf_nan=False)
+
+    @field_validator("x0", "h_start", mode="before")
+    @classmethod
+    def _numbers(cls, value: object) -> object:
+        return _require_json_number(value)
+
     @field_validator("function")
     @classmethod
     def _supported_function(cls, value: str) -> str:
         return get_function(value).expression
 
+
+class PythagorasBrief(_BriefBase):
+    template: Literal["pythagoras"]
+    a: int = Field(ge=1, le=LEG_MAX, strict=True)
+    b: int = Field(ge=1, le=LEG_MAX, strict=True)
+
+    @field_validator("b")
+    @classmethod
+    def _integer_hypotenuse(cls, b: int, info) -> int:
+        a = info.data.get("a")
+        if a is not None and math.isqrt(a * a + b * b) ** 2 != a * a + b * b:
+            raise ValueError(f"legs {a} and {b} do not form a Pythagorean triple "
+                             "(the hypotenuse must be a whole number to count unit squares)")
+        return b
+
+
+class OddSumBrief(_BriefBase):
+    template: Literal["odd_sum"]
+    n: int = Field(ge=2, le=ODD_SUM_MAX_TERMS, strict=True)
+
+
+Brief = Annotated[SecantBrief | PythagorasBrief | OddSumBrief, Field(discriminator="template")]
+BRIEF_ADAPTER = TypeAdapter(Brief)
+
+
+# --- storyboards (plan stage output) -------------------------------------------------
 
 class AxesSpec(_Frozen):
     x_min: float
@@ -80,25 +124,13 @@ class Beat(_Frozen):
     narration: str = ""  # script line for future voice-over; not rendered yet
 
 
-class Storyboard(_Frozen):
-    schema_version: Literal[2] = 2
-    template: Literal["secant_tangent"]
+class _StoryboardBase(_Frozen):
+    schema_version: Literal[3] = 3
     format: VideoFormat
     topic: str
     learning_objective: str
-    function: str
-    x0: float
-    y0: float
-    h_start: float
-    h_end: float
-    derivative: float
-    tangent_intercept: float
-    secant_coefficients: tuple[float, float, float]  # secant slope = a + b*h + c*h^2
-    function_label: str
-    point_label: str
-    secant_slope_label: str
-    tangent_label: str
-    axes: AxesSpec
+    result: str  # the main mathematical result, e.g. "f′(1) = 2 for f(x) = x²"
+    tags: tuple[str, ...]
     beats: tuple[Beat, ...]
 
     @property
@@ -116,6 +148,45 @@ class Storyboard(_Frozen):
         return RESOLUTIONS[self.format]
 
 
+class SecantStoryboard(_StoryboardBase):
+    template: Literal["secant_tangent"]
+    function: str
+    x0: float
+    y0: float
+    h_start: float
+    h_end: float
+    derivative: float
+    tangent_intercept: float
+    secant_coefficients: tuple[float, float, float]  # secant slope = a + b*h + c*h^2
+    function_label: str
+    point_label: str
+    secant_slope_label: str
+    tangent_label: str
+    axes: AxesSpec
+
+
+class PythagorasStoryboard(_StoryboardBase):
+    template: Literal["pythagoras"]
+    a: int
+    b: int
+    c: int
+    equation_label: str  # e.g. "9 + 16 = 25"
+
+
+class OddSumStoryboard(_StoryboardBase):
+    template: Literal["odd_sum"]
+    n: int
+    odd_numbers: tuple[int, ...]
+    partial_sums: tuple[int, ...]
+    sum_labels: tuple[str, ...]  # running sum shown after each layer, e.g. "1 + 3 = 4"
+
+
+Storyboard = Annotated[
+    SecantStoryboard | PythagorasStoryboard | OddSumStoryboard, Field(discriminator="template")
+]
+STORYBOARD_ADAPTER = TypeAdapter(Storyboard)
+
+
 class SceneParams(_Frozen):
     """What the render stage hands to the Manim template."""
 
@@ -126,20 +197,22 @@ class SceneParams(_Frozen):
 
 
 class RenderFacts(_Frozen):
-    """Values measured from the objects the template actually drew."""
+    """What the template actually drew: measured values and every text label shown."""
 
-    point: tuple[float, float]
-    tangent_slope: float
-    tangent_intercept: float
-    final_h: float
-    final_secant_slope: float
+    values: dict[str, float]
     labels: list[str]
 
+
+# --- QA and publishing ------------------------------------------------------------------
 
 class CheckResult(_Frozen):
     name: str
     status: Literal["pass", "fail", "unavailable"]
     detail: str
+
+    @classmethod
+    def of(cls, name: str, ok: bool, detail: str) -> "CheckResult":
+        return cls(name=name, status="pass" if ok else "fail", detail=detail)
 
 
 class QAReport(_Frozen):
@@ -164,15 +237,18 @@ class PublishMetadata(_Frozen):
 
 
 def _format_validation_error(error: ValidationError) -> str:
+    templates = {"secant_tangent", "pythagoras", "odd_sum"}
     lines = []
     for issue in error.errors():
-        field = ".".join(str(part) for part in issue["loc"]) or "(brief)"
+        loc = [str(part) for part in issue["loc"]]
+        if loc and loc[0] in templates:  # drop the union branch name for readability
+            loc = loc[1:]
         message = issue["msg"].removeprefix("Value error, ")
-        lines.append(f"  - {field}: {message}")
+        lines.append(f"  - {'.'.join(loc) or '(brief)'}: {message}")
     return "\n".join(lines)
 
 
-def load_brief(path: Path) -> Brief:
+def load_brief(path: Path) -> SecantBrief | PythagorasBrief | OddSumBrief:
     """Read and validate brief.json, raising BriefError with a readable message."""
     if not path.is_file():
         raise BriefError(f"Brief file not found: {path}")
@@ -185,6 +261,6 @@ def load_brief(path: Path) -> Brief:
     if not isinstance(data, dict):
         raise BriefError(f"{path} must contain a JSON object like {{\"topic\": ...}}")
     try:
-        return Brief.model_validate(data)
+        return BRIEF_ADAPTER.validate_python({"template": DEFAULT_TEMPLATE, **data})
     except ValidationError as error:
         raise BriefError(f"{path} is invalid:\n{_format_validation_error(error)}") from error

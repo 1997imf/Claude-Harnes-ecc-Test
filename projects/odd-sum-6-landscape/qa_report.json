@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "video": "renders/video.mp4",
+  "checks": [
+    {
+      "name": "video_file",
+      "status": "pass",
+      "detail": "135428 bytes"
+    },
+    {
+      "name": "video_decodes",
+      "status": "pass",
+      "detail": "213 frames at 15.001 fps"
+    },
+    {
+      "name": "resolution",
+      "status": "pass",
+      "detail": "854x480 (expected 854x480, landscape)"
+    },
+    {
+      "name": "duration",
+      "status": "pass",
+      "detail": "14.20 s (storyboard 14.00 s ± 1, limits 5–60 s)"
+    },
+    {
+      "name": "frames_not_blank",
+      "status": "pass",
+      "detail": "visible content in sampled frames: 3.5%, 11.7%, 26.1%"
+    },
+    {
+      "name": "odd_terms",
+      "status": "pass",
+      "detail": "terms [1, 3, 5, 7, 9, 11] are the first 6 odd numbers"
+    },
+    {
+      "name": "partial_sums_are_squares",
+      "status": "pass",
+      "detail": "running totals [1, 4, 9, 16, 25, 36] equal 1², 2², …, 6²"
+    },
+    {
+      "name": "total",
+      "status": "pass",
+      "detail": "sum = 36, 6² = 36"
+    },
+    {
+      "name": "sum_labels",
+      "status": "pass",
+      "detail": "every on-screen running sum is correct"
+    },
+    {
+      "name": "rendered_values",
+      "status": "pass",
+      "detail": "drawn values (layer_1_cells, layer_2_cells, layer_3_cells, layer_4_cells, layer_5_cells, layer_6_cells, square_height_cells, square_width_cells, total_cells) and all labels/captions match the storyboard"
+    }
+  ]
+}

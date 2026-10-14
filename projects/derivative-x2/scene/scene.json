@@ -1,37 +1,22 @@
 {
-  "template_file": "secant_tangent_scene.py",
-  "template_sha256": "647d14c7a9eda9d434a490438a5bc18470321355586f28ce3ebb75bfa007d451",
+  "template_file": "/Users/20286323/Developer/Claude-Harnes-Test/pipeline/templates/secant_tangent_scene.py",
+  "template_sha256": "d2eed7766eb21db656d7c939ce298e3eaa85035e34cdd0d5ad4c43d9c9e3655e",
   "scene_class": "SecantTangentTemplate",
   "storyboard": {
-    "schema_version": 2,
-    "template": "secant_tangent",
+    "schema_version": 3,
     "format": "landscape",
     "topic": "Derivative as the limit of secants",
     "learning_objective": "See why the slope of x² at x = 1 is 2, by watching secant lines turn into the tangent line.",
-    "function": "x**2",
-    "x0": 1.0,
-    "y0": 1.0,
-    "h_start": 1.5,
-    "h_end": 0.01,
-    "derivative": 2.0,
-    "tangent_intercept": -1.0,
-    "secant_coefficients": [
-      2.0,
-      1.0,
-      0.0
+    "result": "f′(1) = 2 for f(x) = x²",
+    "tags": [
+      "math",
+      "calculus",
+      "derivative",
+      "limits",
+      "secant line",
+      "tangent line",
+      "manim"
     ],
-    "function_label": "f(x) = x²",
-    "point_label": "P (1, 1)",
-    "secant_slope_label": "Slope = 2 + h",
-    "tangent_label": "Tangent: y = 2x − 1",
-    "axes": {
-      "x_min": -1.0,
-      "x_max": 3.0,
-      "x_step": 1.0,
-      "y_min": -1.0,
-      "y_max": 10.0,
-      "y_step": 2.0
-    },
     "beats": [
       {
         "name": "title",
@@ -110,6 +95,31 @@
         "caption": "",
         "narration": ""
       }
-    ]
+    ],
+    "template": "secant_tangent",
+    "function": "x**2",
+    "x0": 1.0,
+    "y0": 1.0,
+    "h_start": 1.5,
+    "h_end": 0.01,
+    "derivative": 2.0,
+    "tangent_intercept": -1.0,
+    "secant_coefficients": [
+      2.0,
+      1.0,
+      0.0
+    ],
+    "function_label": "f(x) = x²",
+    "point_label": "P (1, 1)",
+    "secant_slope_label": "Slope = 2 + h",
+    "tangent_label": "Tangent: y = 2x − 1",
+    "axes": {
+      "x_min": -1.0,
+      "x_max": 3.0,
+      "x_step": 1.0,
+      "y_min": -1.0,
+      "y_max": 10.0,
+      "y_step": 2.0
+    }
   }
 }

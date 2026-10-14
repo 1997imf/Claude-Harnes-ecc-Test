@@ -1,0 +1,112 @@
+{
+  "template_file": "/Users/20286323/Developer/Claude-Harnes-Test/pipeline/templates/odd_sum_scene.py",
+  "template_sha256": "7385c8db13bb981228c57f00453154a230d246bea232fe9fe8a702b7ea6a2e92",
+  "scene_class": "OddSumTemplate",
+  "storyboard": {
+    "schema_version": 3,
+    "format": "landscape",
+    "topic": "Why 1 + 3 + … + 11 = 36",
+    "learning_objective": "See why 1 + 3 + 5 + … + 11 = 6² by wrapping L-shaped layers around a square.",
+    "result": "1 + 3 + … + 11 = 6² = 36",
+    "tags": [
+      "math",
+      "algebra",
+      "sequences",
+      "odd numbers",
+      "square numbers",
+      "proof without words",
+      "manim"
+    ],
+    "beats": [
+      {
+        "name": "title",
+        "description": "Show the topic",
+        "run_time": 1.0,
+        "caption": "",
+        "narration": ""
+      },
+      {
+        "name": "layer_1",
+        "description": "Add the L-shaped layer of 1 cells",
+        "run_time": 1.5,
+        "caption": "Start with 1 square",
+        "narration": "Start with a single square."
+      },
+      {
+        "name": "layer_2",
+        "description": "Add the L-shaped layer of 3 cells",
+        "run_time": 1.5,
+        "caption": "Add 3 squares: now 2 × 2 = 4",
+        "narration": "Wrap 3 more squares around it to make a 2 by 2 square of 4."
+      },
+      {
+        "name": "layer_3",
+        "description": "Add the L-shaped layer of 5 cells",
+        "run_time": 1.5,
+        "caption": "Add 5 squares: now 3 × 3 = 9",
+        "narration": "Wrap 5 more squares around it to make a 3 by 3 square of 9."
+      },
+      {
+        "name": "layer_4",
+        "description": "Add the L-shaped layer of 7 cells",
+        "run_time": 1.5,
+        "caption": "Add 7 squares: now 4 × 4 = 16",
+        "narration": "Wrap 7 more squares around it to make a 4 by 4 square of 16."
+      },
+      {
+        "name": "layer_5",
+        "description": "Add the L-shaped layer of 9 cells",
+        "run_time": 1.5,
+        "caption": "Add 9 squares: now 5 × 5 = 25",
+        "narration": "Wrap 9 more squares around it to make a 5 by 5 square of 25."
+      },
+      {
+        "name": "layer_6",
+        "description": "Add the L-shaped layer of 11 cells",
+        "run_time": 1.5,
+        "caption": "Add 11 squares: now 6 × 6 = 36",
+        "narration": "Wrap 11 more squares around it to make a 6 by 6 square of 36."
+      },
+      {
+        "name": "result",
+        "description": "State the pattern",
+        "run_time": 2.0,
+        "caption": "The first 6 odd numbers make 6²",
+        "narration": "Adding the first 6 odd numbers always gives a perfect square: 6 squared."
+      },
+      {
+        "name": "hold",
+        "description": "Hold the final frame",
+        "run_time": 2.0,
+        "caption": "1 + 3 + … + 11 = 6² = 36",
+        "narration": ""
+      }
+    ],
+    "template": "odd_sum",
+    "n": 6,
+    "odd_numbers": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "partial_sums": [
+      1,
+      4,
+      9,
+      16,
+      25,
+      36
+    ],
+    "sum_labels": [
+      "1",
+      "1 + 3 = 4",
+      "1 + 3 + 5 = 9",
+      "1 + 3 + 5 + 7 = 16",
+      "1 + 3 + 5 + 7 + 9 = 25",
+      "1 + 3 + 5 + 7 + 9 + 11 = 36"
+    ]
+  }
+}

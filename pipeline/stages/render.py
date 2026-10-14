@@ -15,12 +15,11 @@ from pathlib import Path
 from pipeline.manifest import file_sha256
 from pipeline.paths import VIDEO_FILENAME, ProjectPaths
 from pipeline.runner import StageError
-from pipeline.schemas import RenderFacts, SceneParams, Storyboard
+from pipeline.schemas import STORYBOARD_ADAPTER, RenderFacts, SceneParams
 from pipeline.stages._io import read_model, write_model
+from pipeline.visuals import VISUALS
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-TEMPLATE_FILE = REPO_ROOT / "pipeline" / "templates" / "secant_tangent_scene.py"
-SCENE_CLASS = "SecantTangentTemplate"
 RENDER_TIMEOUT_SECONDS = 600
 RENDER_MAX_ATTEMPTS = 2  # one retry after clearing Manim's working files; no code is changed
 QUALITY = "l"  # 15 fps; pixel size comes from the storyboard format
@@ -31,7 +30,7 @@ SECRET_MARKERS = ("KEY", "TOKEN", "SECRET", "PASSWORD", "CREDENTIAL")
 
 
 def build_render_command(
-    template_path: Path, media_dir: Path, resolution: tuple[int, int] = (854, 480)
+    template_path: Path, scene_class: str, media_dir: Path, resolution: tuple[int, int] = (854, 480)
 ) -> list[str]:
     return [
         sys.executable, "-m", "manim", "render",
@@ -43,7 +42,7 @@ def build_render_command(
         "--disable_caching",
         "--progress_bar", "none",
         str(template_path),
-        SCENE_CLASS,
+        scene_class,
     ]
 
 
@@ -79,22 +78,25 @@ def _tail(text: str) -> str:
     return "\n".join(text.strip().splitlines()[-LOG_TAIL_LINES:])
 
 
-def write_scene_params(paths: ProjectPaths) -> Storyboard:
-    storyboard = read_model(paths.storyboard, Storyboard)
+def write_scene_params(paths: ProjectPaths) -> SceneParams:
+    """Pick the reviewed template for the storyboard's visual and record exactly which one."""
+    storyboard = read_model(paths.storyboard, STORYBOARD_ADAPTER)
+    visual = VISUALS[storyboard.template]
     params = SceneParams(
-        template_file=TEMPLATE_FILE.name,
-        template_sha256=file_sha256(TEMPLATE_FILE),
-        scene_class=SCENE_CLASS,
+        template_file=str(visual.template_file),
+        template_sha256=file_sha256(visual.template_file),
+        scene_class=visual.scene_class,
         storyboard=storyboard,
     )
     write_model(paths.scene_params, params)
-    return storyboard
+    return params
 
 
 def run(paths: ProjectPaths) -> None:
     _clear_previous_outputs(paths)
-    storyboard = write_scene_params(paths)
-    command = build_render_command(TEMPLATE_FILE, paths.manim_media_dir, storyboard.resolution)
+    params = write_scene_params(paths)
+    command = build_render_command(Path(params.template_file), params.scene_class,
+                                   paths.manim_media_dir, params.storyboard.resolution)
     errors = []
     for attempt in range(1, RENDER_MAX_ATTEMPTS + 1):
         shutil.rmtree(paths.manim_media_dir, ignore_errors=True)  # stale partial files cause retries to fail

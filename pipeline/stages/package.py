@@ -5,31 +5,34 @@ Nothing is uploaded; the metadata is ready for a future YouTube/Instagram step.
 
 from html import escape
 
-from pipeline.functions import format_number
 from pipeline.paths import ProjectPaths
 from pipeline.runner import StageError
-from pipeline.schemas import PublishMetadata, QAReport, Storyboard
+from pipeline.schemas import STORYBOARD_ADAPTER, PublishMetadata, QAReport
 from pipeline.stages._io import read_model, write_model
 from pipeline.stages.quality_check import inspect_video
 
-BASE_TAGS = ("math", "calculus", "derivative", "limits", "secant line", "tangent line", "manim")
-BASE_HASHTAGS = ("#math", "#calculus", "#derivative", "#learnmath")
+TOPIC_HASHTAG_COUNT = 2  # hashtags taken from the storyboard's most specific tags
 SHORTS_HASHTAG = "#shorts"
 
 
-def build_metadata(storyboard: Storyboard, report: QAReport, width: int, height: int,
+def _hashtags(storyboard) -> tuple[str, ...]:
+    topical = tuple("#" + tag.replace(" ", "") for tag in storyboard.tags[1 : 1 + TOPIC_HASHTAG_COUNT])
+    shorts = (SHORTS_HASHTAG,) if storyboard.format == "portrait" else ()
+    return ("#math", *topical, "#learnmath", *shorts)
+
+
+def build_metadata(storyboard, report: QAReport, width: int, height: int,
                    duration: float) -> PublishMetadata:
-    hashtags = BASE_HASHTAGS + ((SHORTS_HASHTAG,) if storyboard.format == "portrait" else ())
+    hashtags = _hashtags(storyboard)
     steps = "\n".join(f"• {beat.narration}" for beat in storyboard.beats if beat.narration)
-    answer = (f"Result: f′({format_number(storyboard.x0)}) = {format_number(storyboard.derivative)} "
-              f"for {storyboard.function_label}.")
+    answer = f"Result: {storyboard.result}."
     description = (
         f"{storyboard.learning_objective}\n\n{steps}\n\n{answer}\n"
         "Animated with Manim; the math was checked automatically.\n\n" + " ".join(hashtags)
     )
     caption = f"{storyboard.topic}\n\n{storyboard.learning_objective}\n{answer}\n\n" + " ".join(hashtags)
     return PublishMetadata(
-        title=storyboard.topic, description=description, tags=BASE_TAGS, hashtags=hashtags,
+        title=storyboard.topic, description=description, tags=storyboard.tags, hashtags=hashtags,
         instagram_caption=caption, video=report.video, format=storyboard.format,
         width=width, height=height, duration_seconds=round(duration, 2), qa_passed=report.passed,
     )
@@ -71,15 +74,14 @@ def _metadata_section(metadata: PublishMetadata | None) -> str:
     )
 
 
-def build_preview_html(storyboard: Storyboard, report: QAReport, video_href: str,
+def build_preview_html(storyboard, report: QAReport, video_href: str,
                        metadata: PublishMetadata | None = None) -> str:
     verdict = "All checks passed" if report.passed else "Some checks failed"
     verdict_class = "pass" if report.passed else "fail"
     topic = escape(storyboard.topic)
     facts = (
-        f"{escape(storyboard.function_label)} · x₀ = {storyboard.x0:g} · "
-        f"h: {storyboard.h_start:g} → {storyboard.h_end:g} · "
-        f"f′(x₀) = {storyboard.derivative:g} · {escape(storyboard.tangent_label)}"
+        f"{escape(storyboard.template)} · {escape(storyboard.learning_objective)} · "
+        f"Result: {escape(storyboard.result)}"
     )
     return f"""<!doctype html>
 <html lang="en">
@@ -106,7 +108,7 @@ def build_preview_html(storyboard: Storyboard, report: QAReport, video_href: str
 
 
 def run(paths: ProjectPaths) -> None:
-    storyboard = read_model(paths.storyboard, Storyboard)
+    storyboard = read_model(paths.storyboard, STORYBOARD_ADAPTER)
     report = read_model(paths.qa_report, QAReport)
     decoded, info = inspect_video(paths.video)
     if info is None:

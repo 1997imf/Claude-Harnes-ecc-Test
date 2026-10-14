@@ -1,0 +1,58 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/odd-sum-4-portrait/brief.json",
+  "brief": {
+    "template": "odd_sum",
+    "topic": "Odd numbers build squares",
+    "format": "portrait",
+    "n": 4
+  },
+  "brief_sha256": "d07985b07101034b5aeb8a0afeaf3aa7e5e05ae790a01708ed9089b305f1ed09",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "799211b804a289217f92a699af841658fdc4c4b25aed5bdcded5008df6b23a3a",
+      "started_at": "2026-10-13T21:08:20+00:00",
+      "finished_at": "2026-10-13T21:08:20+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "a52b7e56777396a308973e06fa50c5dc64aac9529c8c20ada18e25e2efb81c45",
+      "started_at": "2026-10-13T21:08:20+00:00",
+      "finished_at": "2026-10-13T21:08:22+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/video.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "6a7bfdcba6ff1a009eacab645392012ab66924c17a7ee93e9fb5a31231d7b95b",
+      "started_at": "2026-10-13T21:08:22+00:00",
+      "finished_at": "2026-10-13T21:08:22+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "ee59fe468a7c789080596208ea4b0792bcb3b85ce9fcaa55727f6d769863bb0e",
+      "started_at": "2026-10-13T21:04:44+00:00",
+      "finished_at": "2026-10-13T21:04:44+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T21:08:22+00:00"
+}

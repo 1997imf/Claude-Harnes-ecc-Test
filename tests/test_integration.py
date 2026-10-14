@@ -45,8 +45,8 @@ def test_preview_points_at_existing_video(rendered):
     paths, _ = rendered
     html = paths.preview.read_text()
 
-    assert 'src="renders/secant_tangent.mp4"' in html
-    assert (paths.preview.parent / "renders" / "secant_tangent.mp4").is_file()
+    assert 'src="renders/video.mp4"' in html
+    assert (paths.preview.parent / "renders" / "video.mp4").is_file()
 
 
 def test_rerun_and_resume_do_not_rerender(rendered, capsys):

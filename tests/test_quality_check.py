@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from pipeline.schemas import Brief, RenderFacts
+from pipeline.schemas import SecantBrief, RenderFacts
 from pipeline.stages.plan import build_storyboard
 from pipeline.stages.quality_check import (
     check_math,
@@ -14,25 +14,28 @@ from pipeline.stages.quality_check import (
 )
 from tests.conftest import EXAMPLE_BRIEF, make_video
 
-STORYBOARD = build_storyboard(Brief.model_validate(EXAMPLE_BRIEF))
+STORYBOARD = build_storyboard(SecantBrief.model_validate(EXAMPLE_BRIEF))
 
 
-def _facts(**changes):
+def _facts(labels=None, drop=(), **value_changes):
     values = {
-        "point": (1.0, 1.0),
+        "point_x": 1.0,
+        "point_y": 1.0,
         "tangent_slope": 2.0,
         "tangent_intercept": -1.0,
         "final_h": STORYBOARD.h_end,
         "final_secant_slope": 2.0 + STORYBOARD.h_end,
-        "labels": [
-            STORYBOARD.function_label,
-            STORYBOARD.point_label,
-            STORYBOARD.secant_slope_label,
-            STORYBOARD.tangent_label,
-            *(beat.caption for beat in STORYBOARD.beats if beat.caption),
-        ],
+        **value_changes,
     }
-    return RenderFacts.model_validate({**values, **changes})
+    default_labels = [
+        STORYBOARD.function_label,
+        STORYBOARD.point_label,
+        STORYBOARD.secant_slope_label,
+        STORYBOARD.tangent_label,
+        *(beat.caption for beat in STORYBOARD.beats if beat.caption),
+    ]
+    return RenderFacts(values={k: v for k, v in values.items() if k not in drop},
+                       labels=default_labels if labels is None else labels)
 
 
 def _write_facts(tmp_path, facts):
@@ -131,10 +134,11 @@ def test_rendered_values_pass_when_scene_matches_storyboard(tmp_path):
 @pytest.mark.parametrize(
     "changes, fragment",
     [
-        ({"tangent_slope": 2.5}, "tangent slope"),
-        ({"point": (1.2, 1.0)}, "point P"),
-        ({"final_h": 0.5}, "final h"),
+        ({"tangent_slope": 2.5}, "tangent_slope drawn as 2.5000"),
+        ({"point_x": 1.2}, "point_x drawn"),
+        ({"final_h": 0.5}, "final_h drawn"),
         ({"labels": ["f(x) = x²"]}, "missing labels"),
+        ({"drop": ("tangent_intercept",)}, "tangent_intercept was not measured"),
     ],
 )
 def test_rendered_values_fail_on_mismatch(tmp_path, changes, fragment):

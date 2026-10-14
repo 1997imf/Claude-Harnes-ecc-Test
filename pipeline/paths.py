@@ -6,7 +6,7 @@ projects/<slug>/
 ├── storyboard.json       plan stage
 ├── scene/scene.json      render stage (parameters for the Manim template)
 ├── renders/              render stage (git-ignored)
-│   ├── secant_tangent.mp4
+│   ├── video.mp4
 │   ├── render_facts.json
 │   ├── render.log
 │   └── manim_media/      Manim's own working files
@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 BRIEF_FILENAME = "brief.json"
-VIDEO_FILENAME = "secant_tangent.mp4"
+VIDEO_FILENAME = "video.mp4"
 
 
 @dataclass(frozen=True)

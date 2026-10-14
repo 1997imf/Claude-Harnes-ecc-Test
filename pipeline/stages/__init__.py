@@ -2,10 +2,15 @@
 
 from pathlib import Path
 
+from pipeline import visuals
 from pipeline.runner import Stage
 from pipeline.stages import package, plan, quality_check, render
+from pipeline.visuals import TEMPLATE_FILES
 
 FUNCTIONS_FILE = Path(__file__).resolve().parent.parent / "functions.py"
+SCHEMAS_FILE = Path(__file__).resolve().parent.parent / "schemas.py"
+# Planning and math checks for every visual type live here.
+VISUAL_FILES = tuple(sorted(Path(visuals.__file__).resolve().parent.glob("*.py")))
 
 
 def _source(module) -> Path:
@@ -16,22 +21,22 @@ def _source(module) -> Path:
 DEFAULT_STAGES: tuple[Stage, ...] = (
     Stage(
         name="plan",
-        inputs=lambda p: (p.brief, _source(plan), FUNCTIONS_FILE),
+        inputs=lambda p: (p.brief, _source(plan), FUNCTIONS_FILE, SCHEMAS_FILE, *VISUAL_FILES),
         outputs=lambda p: (p.storyboard,),
         run=plan.run,
         validate=plan.validate,
     ),
     Stage(
         name="render",
-        # The template imports pipeline.functions, so editing either must re-render.
-        inputs=lambda p: (p.storyboard, render.TEMPLATE_FILE, FUNCTIONS_FILE, _source(render)),
+        # Templates import pipeline.functions, so editing it must re-render too.
+        inputs=lambda p: (p.storyboard, *TEMPLATE_FILES, FUNCTIONS_FILE, _source(render)),
         outputs=lambda p: (p.scene_params, p.video, p.render_facts, p.render_log),
         run=render.run,
         validate=render.validate,
     ),
     Stage(
         name="quality_check",
-        inputs=lambda p: (p.video, p.render_facts, p.storyboard, _source(quality_check)),
+        inputs=lambda p: (p.video, p.render_facts, p.storyboard, _source(quality_check), *VISUAL_FILES),
         outputs=lambda p: (p.qa_report,),
         run=quality_check.run,
         validate=quality_check.validate,

@@ -5,7 +5,7 @@ import json
 import pytest
 
 from pipeline.manifest import StageRecord, new_manifest, save_manifest, with_stage
-from pipeline.schemas import Brief
+from pipeline.schemas import BRIEF_ADAPTER
 from pipeline.stages.plan import build_storyboard, verify_storyboard
 from pipeline.topics import CATALOG, project_slug, select_topic, write_topic_brief
 
@@ -50,12 +50,29 @@ def test_explicit_topic_and_unknown_topic(tmp_path):
 def test_written_brief_is_valid(tmp_path):
     path = write_topic_brief(CATALOG[1], "portrait", tmp_path)
 
-    brief = Brief.model_validate(json.loads(path.read_text()))
-    assert brief.function == CATALOG[1].function and brief.format == "portrait"
+    brief = BRIEF_ADAPTER.validate_python(json.loads(path.read_text()))
+    assert brief.template == CATALOG[1].template and brief.format == "portrait"
+
+
+def test_fresh_topic_of_a_different_visual_type_is_preferred(tmp_path):
+    secant_topics = [t for t in CATALOG if t.template == "secant_tangent"]
+    _mark_produced(tmp_path, CATALOG[0], "2026-10-13T10:00:00+00:00")
+    _mark_produced(tmp_path, CATALOG[1], "2026-10-13T11:00:00+00:00")  # pythagoras, most recent
+
+    chosen = select_topic(tmp_path, "portrait")
+
+    assert chosen.template not in {CATALOG[1].template}
+    assert chosen != CATALOG[0] and chosen in CATALOG
+    assert len(secant_topics) >= 2
+
+
+def test_catalog_has_several_visual_types_with_unique_ids():
+    assert len({t.template for t in CATALOG}) >= 3
+    assert len({t.id for t in CATALOG}) == len(CATALOG)
 
 
 @pytest.mark.parametrize("topic", CATALOG, ids=lambda t: t.id)
 def test_every_catalog_topic_passes_the_pre_render_math_check(topic, tmp_path):
-    brief = Brief.model_validate(json.loads(write_topic_brief(topic, "portrait", tmp_path).read_text()))
+    brief = BRIEF_ADAPTER.validate_python(json.loads(write_topic_brief(topic, "portrait", tmp_path).read_text()))
 
     verify_storyboard(build_storyboard(brief))  # raises StageError on any wrong claim

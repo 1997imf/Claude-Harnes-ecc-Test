@@ -9,15 +9,18 @@ from pipeline.runner import StageError
 from pipeline.schemas import SceneParams
 from pipeline.stages import render
 from pipeline.stages.plan import run as plan_run
+from pipeline.visuals import VISUALS
+from tests.conftest import write_brief
 
 
 def test_render_command_is_an_argument_list_at_low_quality(tmp_path):
-    command = render.build_render_command(tmp_path / "scene.py", tmp_path / "media")
+    command = render.build_render_command(tmp_path / "scene.py", "MyScene", tmp_path / "media", (480, 854))
 
     assert command[:4] == [sys.executable, "-m", "manim", "render"]
     assert command[command.index("--quality") + 1] == "l"
     assert "--disable_caching" in command
-    assert command[-1] == render.SCENE_CLASS
+    assert command[command.index("--resolution") + 1] == "480,854"
+    assert command[-1] == "MyScene"
 
 
 def test_render_environment_drops_secrets_and_points_at_scene_files(example_project):
@@ -41,7 +44,7 @@ def test_scene_params_wrap_storyboard_and_pin_template_hash(example_project):
     render.write_scene_params(example_project)
 
     params = SceneParams.model_validate_json(example_project.scene_params.read_text())
-    assert params.scene_class == render.SCENE_CLASS
+    assert params.scene_class == VISUALS["secant_tangent"].scene_class
     assert params.storyboard.x0 == 1.0
     assert len(params.template_sha256) == 64
 
@@ -98,14 +101,31 @@ def test_real_manim_failure_is_reported(example_project, tmp_path, monkeypatch):
     broken = tmp_path / "broken_scene.py"
     broken.write_text(
         "from manim import Scene\n"
-        f"class {render.SCENE_CLASS}(Scene):\n"
+        f"class {VISUALS['secant_tangent'].scene_class}(Scene):\n"
         "    def construct(self):\n"
         "        raise RuntimeError('template exploded')\n"
     )
-    monkeypatch.setattr(render, "TEMPLATE_FILE", broken)
+    monkeypatch.setitem(VISUALS, "secant_tangent", VISUALS["secant_tangent"]._replace(template_file=broken))
 
     with pytest.raises(StageError, match="exit code") as error:
         render.run(example_project)
 
     assert "render.log" in str(error.value)
     assert "template exploded" in example_project.render_log.read_text()
+
+
+@pytest.mark.parametrize(
+    "brief, scene_class",
+    [
+        ({"template": "pythagoras", "topic": "t", "a": 3, "b": 4}, "PythagorasTemplate"),
+        ({"template": "odd_sum", "topic": "t", "n": 4, "format": "portrait"}, "OddSumTemplate"),
+    ],
+)
+def test_each_visual_type_is_routed_to_its_own_template(tmp_path, brief, scene_class):
+    project = write_brief(tmp_path / "p", brief)
+    plan_run(project)
+
+    params = render.write_scene_params(project)
+
+    assert params.scene_class == scene_class
+    assert params.template_file == str(VISUALS[brief["template"]].template_file)

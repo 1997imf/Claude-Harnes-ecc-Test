@@ -1,0 +1,59 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/pythagoras-5-12-13-portrait/brief.json",
+  "brief": {
+    "template": "pythagoras",
+    "topic": "A 5-12-13 right triangle",
+    "format": "portrait",
+    "a": 5,
+    "b": 12
+  },
+  "brief_sha256": "d3d014a8e4f8215a54b062b7afcdc28dcea208093813ee7a3271a8cf357a175b",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "14e38206d324c07fa92fa22b2581fc5531c966965f14c0f6da6803cfc850277c",
+      "started_at": "2026-10-13T21:06:14+00:00",
+      "finished_at": "2026-10-13T21:06:14+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "4d305ba0775d42200dd58109f6b6a0e36b76260ecb7d0709c3328968d160f47f",
+      "started_at": "2026-10-13T21:06:14+00:00",
+      "finished_at": "2026-10-13T21:06:17+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/video.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "b955c84d25e0a17c77124e97589459481fd6199a40bb3b6bb4a216c00e13b442",
+      "started_at": "2026-10-13T21:06:17+00:00",
+      "finished_at": "2026-10-13T21:06:17+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "65dfa47ad284b1eaf791a5c75e9b6cab1315bc4ba40fb9b5dd60421b1e51470c",
+      "started_at": "2026-10-13T21:06:17+00:00",
+      "finished_at": "2026-10-13T21:06:18+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T21:06:18+00:00"
+}

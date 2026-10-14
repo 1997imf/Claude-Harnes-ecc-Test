@@ -1,0 +1,59 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/pythagoras-3-4-5-portrait/brief.json",
+  "brief": {
+    "template": "pythagoras",
+    "topic": "Pythagoras by counting squares",
+    "format": "portrait",
+    "a": 3,
+    "b": 4
+  },
+  "brief_sha256": "13491c8439c32b71d99a50af36713da485119f5205aedcdfdd988173e124d9a4",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "a866a603fa2b1a576e38d7db5e79b5b23a427c6ba461d680f07689148eea6111",
+      "started_at": "2026-10-13T21:06:18+00:00",
+      "finished_at": "2026-10-13T21:06:18+00:00",
+      "artifacts": [
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "3ab39812a01d533df9b86042a6d38abdc274afa01b18a327a6c8450b8a651f4d",
+      "started_at": "2026-10-13T21:06:18+00:00",
+      "finished_at": "2026-10-13T21:06:21+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/video.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "d3eeb5c1b33ca0c91521e3040d34ef6ead604b2cfbdcb3c7ffe2bf7606f77682",
+      "started_at": "2026-10-13T21:06:21+00:00",
+      "finished_at": "2026-10-13T21:06:21+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "d5b4fb8df64484fb8d56cf2216b9bcc89df59b64f66a5fc6acce3b00bab6f7c2",
+      "started_at": "2026-10-13T21:06:21+00:00",
+      "finished_at": "2026-10-13T21:06:21+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-13T21:06:21+00:00"
+}

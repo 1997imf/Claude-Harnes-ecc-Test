@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "video": "renders/video.mp4",
+  "checks": [
+    {
+      "name": "video_file",
+      "status": "pass",
+      "detail": "206404 bytes"
+    },
+    {
+      "name": "video_decodes",
+      "status": "pass",
+      "detail": "203 frames at 15 fps"
+    },
+    {
+      "name": "resolution",
+      "status": "pass",
+      "detail": "480x854 (expected 480x854, portrait)"
+    },
+    {
+      "name": "duration",
+      "status": "pass",
+      "detail": "13.53 s (storyboard 13.50 s ± 1, limits 5–60 s)"
+    },
+    {
+      "name": "frames_not_blank",
+      "status": "pass",
+      "detail": "visible content in sampled frames: 2.4%, 12.4%, 22.2%"
+    },
+    {
+      "name": "pythagorean_triple",
+      "status": "pass",
+      "detail": "3² + 4² = 25, 5² = 25"
+    },
+    {
+      "name": "triangle_inequality",
+      "status": "pass",
+      "detail": "sides 3, 4, 5 form a triangle"
+    },
+    {
+      "name": "equation_label",
+      "status": "pass",
+      "detail": "on-screen '9 + 16 = 25' parsed as [9, 16, 25]"
+    },
+    {
+      "name": "rendered_values",
+      "status": "pass",
+      "detail": "drawn values (area_a, area_b, area_c, cells_a, cells_b, cells_c, hypotenuse, leg_a, leg_b, right_angle_deg) and all labels/captions match the storyboard"
+    }
+  ]
+}

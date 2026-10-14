@@ -1,33 +1,18 @@
 {
-  "schema_version": 2,
-  "template": "secant_tangent",
+  "schema_version": 3,
   "format": "portrait",
   "topic": "How steep is x² at x = 2?",
   "learning_objective": "See why the slope of x² at x = 2 is 4, by watching secant lines turn into the tangent line.",
-  "function": "x**2",
-  "x0": 2.0,
-  "y0": 4.0,
-  "h_start": 1.0,
-  "h_end": 0.01,
-  "derivative": 4.0,
-  "tangent_intercept": -4.0,
-  "secant_coefficients": [
-    4.0,
-    1.0,
-    0.0
+  "result": "f′(2) = 4 for f(x) = x²",
+  "tags": [
+    "math",
+    "calculus",
+    "derivative",
+    "limits",
+    "secant line",
+    "tangent line",
+    "manim"
   ],
-  "function_label": "f(x) = x²",
-  "point_label": "P (2, 4)",
-  "secant_slope_label": "Slope = 4 + h",
-  "tangent_label": "Tangent: y = 4x − 4",
-  "axes": {
-    "x_min": -1.0,
-    "x_max": 4.0,
-    "x_step": 1.0,
-    "y_min": -1.0,
-    "y_max": 17.0,
-    "y_step": 2.0
-  },
   "beats": [
     {
       "name": "title",
@@ -106,5 +91,30 @@
       "caption": "",
       "narration": ""
     }
-  ]
+  ],
+  "template": "secant_tangent",
+  "function": "x**2",
+  "x0": 2.0,
+  "y0": 4.0,
+  "h_start": 1.0,
+  "h_end": 0.01,
+  "derivative": 4.0,
+  "tangent_intercept": -4.0,
+  "secant_coefficients": [
+    4.0,
+    1.0,
+    0.0
+  ],
+  "function_label": "f(x) = x²",
+  "point_label": "P (2, 4)",
+  "secant_slope_label": "Slope = 4 + h",
+  "tangent_label": "Tangent: y = 4x − 4",
+  "axes": {
+    "x_min": -1.0,
+    "x_max": 4.0,
+    "x_step": 1.0,
+    "y_min": -1.0,
+    "y_max": 17.0,
+    "y_step": 2.0
+  }
 }
