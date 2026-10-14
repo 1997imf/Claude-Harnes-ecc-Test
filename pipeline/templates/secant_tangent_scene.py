@@ -12,7 +12,7 @@ from manim import (
 )
 
 from pipeline.functions import (
-    MINUS, LineEquation, clip_line_to_box, format_number, get_function, secant_slope,
+    LineEquation, clip_line_to_box, format_number, get_function, secant_slope, with_minus,
 )
 from pipeline.templates._base import PipelineScene
 
@@ -128,8 +128,8 @@ class SecantTangentTemplate(PipelineScene):
         self._place_panel(formula)
         readout = always_redraw(
             lambda: self.text(
-                f"h = {h.get_value():.2f}   "
-                f"Slope = {secant_slope(fn, board.x0, h.get_value()):.2f}".replace("-", MINUS), WHITE
+                with_minus(f"h = {h.get_value():.2f}   "
+                           f"Slope = {secant_slope(fn, board.x0, h.get_value()):.2f}"), WHITE
             ).next_to(formula, DOWN, aligned_edge=LEFT)
         )
         return secant, q_dot, q_label, VGroup(formula, readout)
@@ -137,7 +137,7 @@ class SecantTangentTemplate(PipelineScene):
     def _show_tangent(self, fade_out: VGroup, panel: VGroup) -> Line:
         board = self.board
         tangent = self._line_through_p(board.derivative, TANGENT_COLOR)
-        limit_text = f"h → 0,  Slope → {format_number(board.derivative).replace('-', MINUS)}"
+        limit_text = f"h → 0,  Slope → {with_minus(format_number(board.derivative))}"
         tangent_label = VGroup(
             self.label(board.tangent_label, TANGENT_COLOR), self.label(limit_text, TANGENT_COLOR)
         ).arrange(DOWN, aligned_edge=LEFT)

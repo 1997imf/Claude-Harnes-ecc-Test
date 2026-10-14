@@ -7,7 +7,7 @@ here, before any rendering happens.
 
 from pipeline.paths import ProjectPaths
 from pipeline.runner import StageError
-from pipeline.schemas import H_END, STORYBOARD_ADAPTER, BriefError, load_brief  # noqa: F401 (H_END re-exported)
+from pipeline.schemas import STORYBOARD_ADAPTER, BriefError, load_brief
 from pipeline.stages._io import read_model, write_model
 from pipeline.visuals import VISUALS
 

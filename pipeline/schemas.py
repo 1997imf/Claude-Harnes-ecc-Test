@@ -12,7 +12,7 @@ Each visualization type ("template") has its own brief and storyboard shape;
 import json
 import math
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Union, get_args
 
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, ValidationError, field_validator
 
@@ -101,7 +101,10 @@ class OddSumBrief(_BriefBase):
     n: int = Field(ge=2, le=ODD_SUM_MAX_TERMS, strict=True)
 
 
-Brief = Annotated[SecantBrief | PythagorasBrief | OddSumBrief, Field(discriminator="template")]
+BRIEF_TYPES = (SecantBrief, PythagorasBrief, OddSumBrief)
+# Template names come from each brief class's `template` Literal, so they are defined once.
+TEMPLATE_NAMES = frozenset(get_args(cls.model_fields["template"].annotation)[0] for cls in BRIEF_TYPES)
+Brief = Annotated[Union[BRIEF_TYPES], Field(discriminator="template")]
 BRIEF_ADAPTER = TypeAdapter(Brief)
 
 
@@ -237,11 +240,10 @@ class PublishMetadata(_Frozen):
 
 
 def _format_validation_error(error: ValidationError) -> str:
-    templates = {"secant_tangent", "pythagoras", "odd_sum"}
     lines = []
     for issue in error.errors():
         loc = [str(part) for part in issue["loc"]]
-        if loc and loc[0] in templates:  # drop the union branch name for readability
+        if loc and loc[0] in TEMPLATE_NAMES:  # drop the union branch name for readability
             loc = loc[1:]
         message = issue["msg"].removeprefix("Value error, ")
         lines.append(f"  - {'.'.join(loc) or '(brief)'}: {message}")

@@ -36,15 +36,11 @@ class VideoInfo:
     sample_frames: tuple[np.ndarray, ...]
 
 
-def _check(name: str, ok: bool, detail: str) -> CheckResult:
-    return CheckResult(name=name, status="pass" if ok else "fail", detail=detail)
-
-
 def check_video_file(video: Path) -> CheckResult:
     if not video.is_file():
-        return _check("video_file", False, f"{video.name} not found")
+        return CheckResult.of("video_file", False, f"{video.name} not found")
     size = video.stat().st_size
-    return _check("video_file", size > 0, f"{size} bytes" if size else "file is empty")
+    return CheckResult.of("video_file", size > 0, f"{size} bytes" if size else "file is empty")
 
 
 def _decode(video: Path) -> VideoInfo:
@@ -76,13 +72,13 @@ def inspect_video(video: Path) -> tuple[CheckResult, VideoInfo | None]:
     try:
         info = _decode(video)
     except (av.error.FFmpegError, OSError, IndexError, ValueError, ZeroDivisionError) as error:
-        return _check("video_decodes", False, f"cannot decode: {error}"), None
-    return _check("video_decodes", True, f"{info.frame_count} frames at {info.fps:g} fps"), info
+        return CheckResult.of("video_decodes", False, f"cannot decode: {error}"), None
+    return CheckResult.of("video_decodes", True, f"{info.frame_count} frames at {info.fps:g} fps"), info
 
 
 def check_resolution(info: VideoInfo, storyboard) -> CheckResult:
     size, expected = (info.width, info.height), storyboard.resolution
-    return _check("resolution", size == expected,
+    return CheckResult.of("resolution", size == expected,
                   f"{size[0]}x{size[1]} (expected {expected[0]}x{expected[1]}, {storyboard.format})")
 
 
@@ -90,7 +86,7 @@ def check_duration(info: VideoInfo, storyboard) -> CheckResult:
     expected = storyboard.expected_duration
     in_limits = MIN_DURATION_SECONDS <= info.duration <= MAX_DURATION_SECONDS
     matches = abs(info.duration - expected) <= DURATION_TOLERANCE_SECONDS
-    return _check(
+    return CheckResult.of(
         "duration", in_limits and matches,
         f"{info.duration:.2f} s (storyboard {expected:.2f} s ± {DURATION_TOLERANCE_SECONDS:g}, "
         f"limits {MIN_DURATION_SECONDS:g}–{MAX_DURATION_SECONDS:g} s)",
@@ -101,12 +97,7 @@ def check_frames(info: VideoInfo) -> CheckResult:
     fractions = [float((frame.max(axis=2) > BLANK_PIXEL_THRESHOLD).mean()) for frame in info.sample_frames]
     ok = bool(fractions) and all(f >= MIN_CONTENT_FRACTION for f in fractions)
     shown = ", ".join(f"{f:.1%}" for f in fractions)
-    return _check("frames_not_blank", ok, f"visible content in sampled frames: {shown}")
-
-
-def check_math(storyboard) -> list[CheckResult]:
-    """Topic-specific math checks, from the storyboard's visual."""
-    return VISUALS[storyboard.template].check_math(storyboard)
+    return CheckResult.of("frames_not_blank", ok, f"visible content in sampled frames: {shown}")
 
 
 def _fact_mismatches(storyboard, facts: RenderFacts) -> list[str]:
@@ -128,15 +119,15 @@ def _fact_mismatches(storyboard, facts: RenderFacts) -> list[str]:
 
 def check_rendered_values(storyboard, facts_path: Path) -> CheckResult:
     if not facts_path.is_file():
-        return _check("rendered_values", False, f"{facts_path.name} not found")
+        return CheckResult.of("rendered_values", False, f"{facts_path.name} not found")
     try:
         facts = RenderFacts.model_validate_json(facts_path.read_text(encoding="utf-8"))
     except ValidationError as error:
-        return _check("rendered_values", False, f"{facts_path.name} is invalid: {error}")
+        return CheckResult.of("rendered_values", False, f"{facts_path.name} is invalid: {error}")
     problems = _fact_mismatches(storyboard, facts)
     measured = ", ".join(sorted(VISUALS[storyboard.template].expected_values(storyboard)))
     detail = "; ".join(problems) or f"drawn values ({measured}) and all labels/captions match the storyboard"
-    return _check("rendered_values", not problems, detail)
+    return CheckResult.of("rendered_values", not problems, detail)
 
 
 def run_quality_checks(video: Path, storyboard, facts_path: Path) -> QAReport:
@@ -145,10 +136,10 @@ def run_quality_checks(video: Path, storyboard, facts_path: Path) -> QAReport:
     checks.append(decode_check)
     if info is None:
         skipped = "skipped: video could not be decoded"
-        checks += [_check(name, False, skipped) for name in ("resolution", "duration", "frames_not_blank")]
+        checks += [CheckResult.of(name, False, skipped) for name in ("resolution", "duration", "frames_not_blank")]
     else:
         checks += [check_resolution(info, storyboard), check_duration(info, storyboard), check_frames(info)]
-    checks += check_math(storyboard)
+    checks += VISUALS[storyboard.template].check_math(storyboard)  # topic-specific math
     checks.append(check_rendered_values(storyboard, facts_path))
     passed = all(check.status == "pass" for check in checks)
     return QAReport(passed=passed, video=video.name, checks=tuple(checks))

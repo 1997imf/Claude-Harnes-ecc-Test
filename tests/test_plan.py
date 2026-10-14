@@ -2,8 +2,8 @@
 
 import pytest
 
-from pipeline.schemas import STORYBOARD_ADAPTER, SecantBrief
-from pipeline.stages.plan import H_END, build_storyboard
+from pipeline.schemas import H_END, STORYBOARD_ADAPTER, SecantBrief
+from pipeline.stages.plan import build_storyboard
 
 EXAMPLE = SecantBrief(topic="Derivative as the limit of secants", function="x**2", x0=1, h_start=1.5)
 

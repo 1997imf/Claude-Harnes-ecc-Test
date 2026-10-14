@@ -41,6 +41,11 @@ def format_number(value: float) -> str:
     return f"{value:g}"
 
 
+def with_minus(text: str) -> str:
+    """Use the typographic minus sign on screen: "-1.5" -> "−1.5"."""
+    return text.replace("-", MINUS)
+
+
 def _signed_term(value: float) -> str:
     """Format the second term of a sum, e.g. -1 -> " − 1", 0.5 -> " + 0.5"."""
     sign = MINUS if value < 0 else "+"
@@ -131,13 +136,13 @@ def format_line_equation(line: LineEquation) -> str:
     """Readable equation such as "y = 2x − 1" (Unicode minus, no LaTeX)."""
     slope, intercept = line
     if abs(slope) < ZERO_TOLERANCE:
-        return f"y = {format_number(intercept).replace('-', MINUS)}"
+        return f"y = {with_minus(format_number(intercept))}"
     if abs(slope - 1) < ZERO_TOLERANCE:
         slope_text = "x"
     elif abs(slope + 1) < ZERO_TOLERANCE:
         slope_text = f"{MINUS}x"
     else:
-        slope_text = f"{format_number(slope).replace('-', MINUS)}x"
+        slope_text = f"{with_minus(format_number(slope))}x"
     if abs(intercept) < ZERO_TOLERANCE:
         return f"y = {slope_text}"
     return f"y = {slope_text}{_signed_term(intercept)}"

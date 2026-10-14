@@ -1,4 +1,4 @@
-"""Render stage: storyboard.json -> scene/scene.json -> renders/secant_tangent.mp4 (480p).
+"""Render stage: storyboard.json -> scene/scene.json -> renders/video.mp4 (480p).
 
 No Python code is generated: the stage writes parameters for a fixed, reviewed
 Manim template. Manim runs in a separate process with an argument list (never

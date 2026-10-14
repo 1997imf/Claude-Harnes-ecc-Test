@@ -15,6 +15,7 @@ from pipeline.functions import (
     numeric_derivative,
     secant_slope,
     tangent_line,
+    with_minus,
 )
 from pipeline.schemas import H_END, AxesSpec, Beat, CheckResult, SecantBrief, SecantStoryboard
 
@@ -42,7 +43,7 @@ BEAT_TIMING = (
 
 
 def _num(value: float) -> str:
-    return format_number(value).replace("-", "−")
+    return with_minus(format_number(value))
 
 
 def _tick_step(span: float) -> float:
@@ -68,7 +69,7 @@ def _script(fn: SupportedFunction, brief: SecantBrief) -> dict[str, tuple[str, s
     """beat name -> (on-screen caption, narration line), using computed values only."""
     x0, m = _num(brief.x0), _num(fn.derivative(brief.x0))
     y0 = _num(fn.f(brief.x0))
-    end_slope = f"{secant_slope(fn, brief.x0, H_END):.2f}".replace("-", "−")
+    end_slope = with_minus(f"{secant_slope(fn, brief.x0, H_END):.2f}")
     return {
         "curve": (f"Our curve: {fn.label}", f"Here is the curve {fn.label}."),
         "point": (f"Zoom in on P = ({x0}, {y0})",

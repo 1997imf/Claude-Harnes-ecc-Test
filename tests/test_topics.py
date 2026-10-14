@@ -76,3 +76,11 @@ def test_every_catalog_topic_passes_the_pre_render_math_check(topic, tmp_path):
     brief = BRIEF_ADAPTER.validate_python(json.loads(write_topic_brief(topic, "portrait", tmp_path).read_text()))
 
     verify_storyboard(build_storyboard(brief))  # raises StageError on any wrong claim
+
+
+def test_every_brief_template_has_a_registered_visual_and_vice_versa():
+    from pipeline.schemas import TEMPLATE_NAMES
+    from pipeline.visuals import VISUALS
+
+    assert TEMPLATE_NAMES == set(VISUALS)
+    assert {t.template for t in CATALOG} <= TEMPLATE_NAMES

@@ -7,11 +7,11 @@ import pytest
 from pipeline.schemas import SecantBrief, RenderFacts
 from pipeline.stages.plan import build_storyboard
 from pipeline.stages.quality_check import (
-    check_math,
     check_rendered_values,
     inspect_video,
     run_quality_checks,
 )
+from pipeline.visuals.secant_tangent import check_math
 from tests.conftest import EXAMPLE_BRIEF, make_video
 
 STORYBOARD = build_storyboard(SecantBrief.model_validate(EXAMPLE_BRIEF))
