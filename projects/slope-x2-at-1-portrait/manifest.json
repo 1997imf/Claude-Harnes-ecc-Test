@@ -12,19 +12,20 @@
   "stages": {
     "plan": {
       "status": "completed",
-      "input_hash": "598d6fb8c5565fcee95d9eb908c3f2ea66b4e77ce9c55b82128f5e2f5bd59254",
-      "started_at": "2026-10-13T21:06:46+00:00",
-      "finished_at": "2026-10-13T21:06:46+00:00",
+      "input_hash": "f188a977d8b628b08e0a2553f32e94145df5989a4fbfd38cd06e0aa990af21ba",
+      "started_at": "2026-10-14T19:47:17+00:00",
+      "finished_at": "2026-10-14T19:47:17+00:00",
       "artifacts": [
+        "lesson_plan.json",
         "storyboard.json"
       ],
       "error": null
     },
     "render": {
       "status": "completed",
-      "input_hash": "6dd9043ea7b551c467ebdda66e00fe51c3f6356097c19e085db8006d210fcb25",
-      "started_at": "2026-10-13T21:06:46+00:00",
-      "finished_at": "2026-10-13T21:06:57+00:00",
+      "input_hash": "a60d0c33fb12fb27b34279f3a60a827f57de8538453432f2f7a0b9167f6bd2be",
+      "started_at": "2026-10-14T19:47:17+00:00",
+      "finished_at": "2026-10-14T19:47:27+00:00",
       "artifacts": [
         "scene/scene.json",
         "renders/video.mp4",
@@ -35,9 +36,9 @@
     },
     "quality_check": {
       "status": "completed",
-      "input_hash": "d7992d66b0c8f6d16c59099a47e91f224dba025b26e681257d4c0ff16ae7d82f",
-      "started_at": "2026-10-13T21:06:57+00:00",
-      "finished_at": "2026-10-13T21:06:57+00:00",
+      "input_hash": "24f143ecd0dcd28ac100f0b947c715dd244e1e31dacf8a4b04b2d43ce209e32d",
+      "started_at": "2026-10-14T19:47:27+00:00",
+      "finished_at": "2026-10-14T19:47:28+00:00",
       "artifacts": [
         "qa_report.json"
       ],
@@ -45,9 +46,9 @@
     },
     "package": {
       "status": "completed",
-      "input_hash": "278d8cf6a21edccf3776b1f6814877c82b5f36ea28550665472bce742d7e3a0e",
-      "started_at": "2026-10-13T21:06:57+00:00",
-      "finished_at": "2026-10-13T21:06:57+00:00",
+      "input_hash": "de7e2226133ed160e8abd9dee8452a65318e479b28c856c8b9be97527cc1c312",
+      "started_at": "2026-10-14T19:47:28+00:00",
+      "finished_at": "2026-10-14T19:47:28+00:00",
       "artifacts": [
         "metadata.json",
         "preview.html"
@@ -55,5 +56,5 @@
       "error": null
     }
   },
-  "updated_at": "2026-10-13T21:06:57+00:00"
+  "updated_at": "2026-10-14T19:47:28+00:00"
 }

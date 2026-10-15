@@ -46,6 +46,11 @@
       "name": "rendered_values",
       "status": "pass",
       "detail": "drawn values (area_a, area_b, area_c, cells_a, cells_b, cells_c, hypotenuse, leg_a, leg_b, right_angle_deg) and all labels/captions match the storyboard"
+    },
+    {
+      "name": "lesson_plan",
+      "status": "pass",
+      "detail": "lesson verified; all 4 required checks ran and passed"
     }
   ]
 }

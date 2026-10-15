@@ -38,7 +38,7 @@ def test_qa_report_passes_and_includes_real_checks(rendered):
 
     names = {check["name"] for check in report["checks"]}
     assert report["passed"] is True
-    assert {"video_decodes", "frames_not_blank", "derivative", "rendered_values"} <= names
+    assert {"video_decodes", "frames_not_blank", "derivative", "rendered_values", "lesson_plan"} <= names
 
 
 def test_preview_points_at_existing_video(rendered):

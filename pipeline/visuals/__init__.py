@@ -15,17 +15,19 @@ TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
 
 
 class Visual(NamedTuple):
-    build_storyboard: Callable[[Any], Any]  # brief -> storyboard
+    build_lesson: Callable[[Any], Any]  # classic brief -> LessonPlan (deterministic planner)
+    build_storyboard: Callable[[Any, str], Any]  # (LessonPlan, video format) -> storyboard
     check_math: Callable[[Any], list[CheckResult]]  # run before rendering and again in QA
     expected_values: Callable[[Any], dict[str, float]]  # what the template must measurably draw
     expected_labels: Callable[[Any], set[str]]  # text that must appear (captions are added by QA)
+    check_names: frozenset[str]  # names check_math reports; lesson plans may require them
     template_file: Path
     scene_class: str
 
 
 def _visual(module, template_name: str, scene_class: str) -> Visual:
-    return Visual(module.build_storyboard, module.check_math, module.expected_values,
-                  module.expected_labels, TEMPLATES_DIR / template_name, scene_class)
+    return Visual(module.build_lesson, module.build_storyboard, module.check_math, module.expected_values,
+                  module.expected_labels, module.CHECK_NAMES, TEMPLATES_DIR / template_name, scene_class)
 
 
 VISUALS: dict[str, Visual] = {

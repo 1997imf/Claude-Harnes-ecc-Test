@@ -16,6 +16,7 @@ from typing import Annotated, Literal, Union, get_args
 
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, ValidationError, field_validator
 
+from pipeline.arithmetic import parse_equation
 from pipeline.functions import get_function
 
 H_END = 0.01  # smallest h shown; h = 0 is undefined because the slope divides by h
@@ -64,7 +65,9 @@ def _require_json_number(value: object) -> object:
     return value
 
 
-class SecantBrief(_BriefBase):
+# --- visualization parameters (shared by briefs and lesson plans) ---------------------
+
+class SecantParams(_Frozen):
     template: Literal["secant_tangent"] = "secant_tangent"
     function: str
     x0: float = Field(ge=-X0_LIMIT, le=X0_LIMIT, allow_inf_nan=False)
@@ -81,7 +84,7 @@ class SecantBrief(_BriefBase):
         return get_function(value).expression
 
 
-class PythagorasBrief(_BriefBase):
+class PythagorasParams(_Frozen):
     template: Literal["pythagoras"]
     a: int = Field(ge=1, le=LEG_MAX, strict=True)
     b: int = Field(ge=1, le=LEG_MAX, strict=True)
@@ -96,16 +99,111 @@ class PythagorasBrief(_BriefBase):
         return b
 
 
-class OddSumBrief(_BriefBase):
+class OddSumParams(_Frozen):
     template: Literal["odd_sum"]
     n: int = Field(ge=2, le=ODD_SUM_MAX_TERMS, strict=True)
 
 
+PARAM_TYPES = (SecantParams, PythagorasParams, OddSumParams)
+# Template names come from each class's `template` Literal, so they are defined once.
+TEMPLATE_NAMES = frozenset(get_args(cls.model_fields["template"].annotation)[0] for cls in PARAM_TYPES)
+Visualization = Annotated[Union[PARAM_TYPES], Field(discriminator="template")]
+
+
+# A classic brief = visualization parameters + presentation fields (topic, format, objective).
+class SecantBrief(_BriefBase, SecantParams):
+    pass
+
+
+class PythagorasBrief(_BriefBase, PythagorasParams):
+    pass
+
+
+class OddSumBrief(_BriefBase, OddSumParams):
+    pass
+
+
 BRIEF_TYPES = (SecantBrief, PythagorasBrief, OddSumBrief)
-# Template names come from each brief class's `template` Literal, so they are defined once.
-TEMPLATE_NAMES = frozenset(get_args(cls.model_fields["template"].annotation)[0] for cls in BRIEF_TYPES)
 Brief = Annotated[Union[BRIEF_TYPES], Field(discriminator="template")]
 BRIEF_ADAPTER = TypeAdapter(Brief)
+
+
+# --- lesson plans (what to teach; rendering-independent) ----------------------------------
+
+Audience = Literal["middle_school", "high_school", "intro_university"]
+ARITHMETIC_MAX_LENGTH = 200
+
+
+class Definition(_Frozen):
+    term: str = Field(min_length=1)
+    meaning: str = Field(min_length=1)
+
+
+class Equation(_Frozen):
+    """An equation as shown to the viewer, optionally with a checkable arithmetic form."""
+
+    display: str = Field(min_length=1)
+    # e.g. "3**2 + 4**2 == 5**2": numbers, + - * / ** and parentheses, exactly one ==.
+    arithmetic: str | None = Field(default=None, max_length=ARITHMETIC_MAX_LENGTH)
+
+    @field_validator("arithmetic")
+    @classmethod
+    def _safe_arithmetic(cls, value: str | None) -> str | None:
+        if value is not None:
+            parse_equation(value)  # validates the syntax without evaluating it
+        return value
+
+
+class DerivativeClaim(_Frozen):
+    kind: Literal["derivative"]
+    function: str
+    at: float
+    value: float
+
+    @field_validator("function")
+    @classmethod
+    def _supported_function(cls, value: str) -> str:
+        return get_function(value).expression
+
+
+class PythagoreanClaim(_Frozen):
+    kind: Literal["pythagorean"]
+    a: int = Field(strict=True)
+    b: int = Field(strict=True)
+    c: int = Field(strict=True)
+
+
+class OddSumClaim(_Frozen):
+    kind: Literal["odd_sum"]
+    n: int = Field(strict=True)
+    total: int = Field(strict=True)
+
+
+Claim = Annotated[DerivativeClaim | PythagoreanClaim | OddSumClaim, Field(discriminator="kind")]
+
+
+class LessonPlan(_Frozen):
+    """Structured math content. Rendering details (timing, layout, format) live elsewhere."""
+
+    schema_version: Literal[1] = 1
+    topic: str = Field(min_length=1, max_length=TOPIC_MAX_LENGTH)
+    learning_objective: str = Field(min_length=1)
+    audience: Audience
+    definitions: tuple[Definition, ...] = ()
+    equations: tuple[Equation, ...] = ()
+    results: tuple[Claim, ...] = Field(min_length=1)  # verified before rendering
+    steps: tuple[str, ...] = Field(min_length=2)
+    examples: tuple[str, ...] = ()
+    conclusion: str = Field(min_length=1)
+    visualization: Visualization
+    required_checks: tuple[str, ...] = Field(min_length=1)
+
+
+class LessonBrief(_Frozen):
+    """A brief that supplies a ready-made lesson plan (e.g. from a future AI planner)."""
+
+    format: VideoFormat = "landscape"
+    lesson: LessonPlan
 
 
 # --- storyboards (plan stage output) -------------------------------------------------
@@ -250,7 +348,7 @@ def _format_validation_error(error: ValidationError) -> str:
     return "\n".join(lines)
 
 
-def load_brief(path: Path) -> SecantBrief | PythagorasBrief | OddSumBrief:
+def load_brief(path: Path) -> SecantBrief | PythagorasBrief | OddSumBrief | LessonBrief:
     """Read and validate brief.json, raising BriefError with a readable message."""
     if not path.is_file():
         raise BriefError(f"Brief file not found: {path}")
@@ -263,6 +361,8 @@ def load_brief(path: Path) -> SecantBrief | PythagorasBrief | OddSumBrief:
     if not isinstance(data, dict):
         raise BriefError(f"{path} must contain a JSON object like {{\"topic\": ...}}")
     try:
+        if "lesson" in data:  # a ready-made lesson plan rather than a classic brief
+            return LessonBrief.model_validate(data)
         return BRIEF_ADAPTER.validate_python({"template": DEFAULT_TEMPLATE, **data})
     except ValidationError as error:
         raise BriefError(f"{path} is invalid:\n{_format_validation_error(error)}") from error

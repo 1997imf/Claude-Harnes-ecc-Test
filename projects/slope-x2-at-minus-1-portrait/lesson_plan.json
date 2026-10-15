@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "topic": "A tangent that slopes downward",
+  "learning_objective": "See why the slope of x² at x = −1 is −2, by watching secant lines turn into the tangent line.",
+  "audience": "high_school",
+  "definitions": [
+    {
+      "term": "secant line",
+      "meaning": "a line through two points of a curve"
+    },
+    {
+      "term": "tangent line",
+      "meaning": "the line that touches the curve at one point with the same steepness as the curve there"
+    },
+    {
+      "term": "derivative",
+      "meaning": "f′(x₀) = the limit of (f(x₀ + h) − f(x₀)) / h as h → 0"
+    }
+  ],
+  "equations": [
+    {
+      "display": "(f(x₀ + h) − f(x₀)) / h = −2 + h",
+      "arithmetic": "(((-0.5)**2) - ((-1.0)**2)) / 0.5 == -2.0 + 1.0*0.5 + 0.0*0.5**2"
+    },
+    {
+      "display": "y = −2x − 1",
+      "arithmetic": "-2.0*(-1.0) + (-1.0) == (-1.0)**2"
+    }
+  ],
+  "results": [
+    {
+      "kind": "derivative",
+      "function": "x**2",
+      "at": -1.0,
+      "value": -2.0
+    }
+  ],
+  "steps": [
+    "Here is the curve f(x) = x².",
+    "We want the steepness of the curve exactly at the point P = (−1, 1).",
+    "Pick a second point Q, a distance h to the right, and draw the line through P and Q.",
+    "The slope of this secant line works out to Slope = −2 + h.",
+    "Now slide Q toward P by shrinking h.",
+    "With h = 0.01 the secant slope is already −1.99.",
+    "In the limit, the secant lines become the tangent line.",
+    "So the derivative at x = −1 is −2: the slope of the tangent line."
+  ],
+  "examples": [
+    "With h = 1.5 the secant slope is −0.5.",
+    "With h = 0.01 it is −1.99."
+  ],
+  "conclusion": "f′(−1) = −2; the tangent line at P is y = −2x − 1.",
+  "visualization": {
+    "template": "secant_tangent",
+    "function": "x**2",
+    "x0": -1.0,
+    "h_start": 1.5
+  },
+  "required_checks": [
+    "derivative",
+    "secant_converges",
+    "secant_formula",
+    "tangent_line",
+    "rendered_values"
+  ]
+}

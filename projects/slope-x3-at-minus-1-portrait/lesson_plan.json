@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "topic": "x³ at x = −1: secants to tangent",
+  "learning_objective": "See why the slope of x³ at x = −1 is 3, by watching secant lines turn into the tangent line.",
+  "audience": "high_school",
+  "definitions": [
+    {
+      "term": "secant line",
+      "meaning": "a line through two points of a curve"
+    },
+    {
+      "term": "tangent line",
+      "meaning": "the line that touches the curve at one point with the same steepness as the curve there"
+    },
+    {
+      "term": "derivative",
+      "meaning": "f′(x₀) = the limit of (f(x₀ + h) − f(x₀)) / h as h → 0"
+    }
+  ],
+  "equations": [
+    {
+      "display": "(f(x₀ + h) − f(x₀)) / h = 3 − 3h + h²",
+      "arithmetic": "(((-0.5)**3) - ((-1.0)**3)) / 0.5 == 3.0 + -3.0*0.5 + 1.0*0.5**2"
+    },
+    {
+      "display": "y = 3x + 2",
+      "arithmetic": "3.0*(-1.0) + (2.0) == (-1.0)**3"
+    }
+  ],
+  "results": [
+    {
+      "kind": "derivative",
+      "function": "x**3",
+      "at": -1.0,
+      "value": 3.0
+    }
+  ],
+  "steps": [
+    "Here is the curve f(x) = x³.",
+    "We want the steepness of the curve exactly at the point P = (−1, −1).",
+    "Pick a second point Q, a distance h to the right, and draw the line through P and Q.",
+    "The slope of this secant line works out to Slope = 3 − 3h + h².",
+    "Now slide Q toward P by shrinking h.",
+    "With h = 0.01 the secant slope is already 2.97.",
+    "In the limit, the secant lines become the tangent line.",
+    "So the derivative at x = −1 is 3: the slope of the tangent line."
+  ],
+  "examples": [
+    "With h = 1 the secant slope is 1.",
+    "With h = 0.01 it is 2.9701."
+  ],
+  "conclusion": "f′(−1) = 3; the tangent line at P is y = 3x + 2.",
+  "visualization": {
+    "template": "secant_tangent",
+    "function": "x**3",
+    "x0": -1.0,
+    "h_start": 1.0
+  },
+  "required_checks": [
+    "derivative",
+    "secant_converges",
+    "secant_formula",
+    "tangent_line",
+    "rendered_values"
+  ]
+}

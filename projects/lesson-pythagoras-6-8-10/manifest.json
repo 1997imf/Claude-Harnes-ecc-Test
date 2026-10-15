@@ -1,0 +1,115 @@
+{
+  "pipeline_version": "0.0.1",
+  "brief_path": "/Users/20286323/Developer/Claude-Harnes-Test/projects/lesson-pythagoras-6-8-10/brief.json",
+  "brief": {
+    "format": "landscape",
+    "lesson": {
+      "schema_version": 1,
+      "topic": "Scaling a right triangle: 6-8-10",
+      "learning_objective": "See that doubling a 3-4-5 triangle gives 6\u00b2 + 8\u00b2 = 10\u00b2 by counting unit squares.",
+      "audience": "middle_school",
+      "definitions": [
+        {
+          "term": "right triangle",
+          "meaning": "a triangle with one 90\u00b0 angle"
+        },
+        {
+          "term": "hypotenuse",
+          "meaning": "the longest side, opposite the right angle"
+        }
+      ],
+      "equations": [
+        {
+          "display": "6\u00b2 + 8\u00b2 = 10\u00b2",
+          "arithmetic": "6**2 + 8**2 == 10**2"
+        },
+        {
+          "display": "36 + 64 = 100",
+          "arithmetic": "36 + 64 == 100"
+        },
+        {
+          "display": "(2\u00b73)\u00b2 + (2\u00b74)\u00b2 = (2\u00b75)\u00b2",
+          "arithmetic": "(2*3)**2 + (2*4)**2 == (2*5)**2"
+        }
+      ],
+      "results": [
+        {
+          "kind": "pythagorean",
+          "a": 6,
+          "b": 8,
+          "c": 10
+        }
+      ],
+      "steps": [
+        "Start from the 3-4-5 right triangle and double every side to get 6, 8 and 10.",
+        "Build a square on each side and count its unit squares: 36, 64 and 100.",
+        "The two smaller squares together hold exactly as many unit squares as the largest one."
+      ],
+      "examples": [
+        "Doubling the sides multiplies every area by 4: 9 \u2192 36, 16 \u2192 64, 25 \u2192 100."
+      ],
+      "conclusion": "6\u00b2 + 8\u00b2 = 10\u00b2, just as 3\u00b2 + 4\u00b2 = 5\u00b2.",
+      "visualization": {
+        "template": "pythagoras",
+        "a": 6,
+        "b": 8
+      },
+      "required_checks": [
+        "pythagorean_triple",
+        "equation_label",
+        "rendered_values",
+        "resolution",
+        "duration"
+      ]
+    }
+  },
+  "brief_sha256": "6ec115ed5bf554ca86dfe9b254d6bd43e94bb2aeafde262083d91d3ecc0f83db",
+  "stages": {
+    "plan": {
+      "status": "completed",
+      "input_hash": "44f87925dc502e5ddf98c2d2875aaf9573107145cdf21fd0fe158797f03e2bca",
+      "started_at": "2026-10-14T19:48:10+00:00",
+      "finished_at": "2026-10-14T19:48:10+00:00",
+      "artifacts": [
+        "lesson_plan.json",
+        "storyboard.json"
+      ],
+      "error": null
+    },
+    "render": {
+      "status": "completed",
+      "input_hash": "841e46e04948f4eafb1bd25b61a0d9693a528c84cc204f5f4c2492ced1b40e9a",
+      "started_at": "2026-10-14T19:48:10+00:00",
+      "finished_at": "2026-10-14T19:48:13+00:00",
+      "artifacts": [
+        "scene/scene.json",
+        "renders/video.mp4",
+        "renders/render_facts.json",
+        "renders/render.log"
+      ],
+      "error": null
+    },
+    "quality_check": {
+      "status": "completed",
+      "input_hash": "20caece160c3a9da4aac2718e7c6a68521631bb9db476dab7187cd859362be38",
+      "started_at": "2026-10-14T19:48:13+00:00",
+      "finished_at": "2026-10-14T19:48:13+00:00",
+      "artifacts": [
+        "qa_report.json"
+      ],
+      "error": null
+    },
+    "package": {
+      "status": "completed",
+      "input_hash": "3ba450583fec662c99327260f47d2f231a0ac643860ae13ed1a5236e16f230c9",
+      "started_at": "2026-10-14T19:48:13+00:00",
+      "finished_at": "2026-10-14T19:48:14+00:00",
+      "artifacts": [
+        "metadata.json",
+        "preview.html"
+      ],
+      "error": null
+    }
+  },
+  "updated_at": "2026-10-14T19:48:14+00:00"
+}

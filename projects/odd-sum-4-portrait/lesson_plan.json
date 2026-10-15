@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "topic": "Odd numbers build squares",
+  "learning_objective": "See why 1 + 3 + 5 + … + 7 = 4² by wrapping L-shaped layers around a square.",
+  "audience": "middle_school",
+  "definitions": [
+    {
+      "term": "odd number",
+      "meaning": "a whole number of the form 2k − 1: 1, 3, 5, 7, …"
+    },
+    {
+      "term": "square number",
+      "meaning": "n × n, the number of cells in an n by n square"
+    }
+  ],
+  "equations": [
+    {
+      "display": "1 + 3 + 5 + 7 = 16 = 4²",
+      "arithmetic": "1 + 3 + 5 + 7 == 4**2"
+    }
+  ],
+  "results": [
+    {
+      "kind": "odd_sum",
+      "n": 4,
+      "total": 16
+    }
+  ],
+  "steps": [
+    "Start with a single square.",
+    "Wrap 3 more squares around it to make a 2 by 2 square of 4.",
+    "Wrap 5 more squares around it to make a 3 by 3 square of 9.",
+    "Wrap 7 more squares around it to make a 4 by 4 square of 16.",
+    "Adding the first 4 odd numbers always gives a perfect square: 4 squared."
+  ],
+  "examples": [
+    "1 + 3 = 4 = 2²",
+    "1 + 3 + 5 = 9 = 3²",
+    "1 + 3 + 5 + 7 = 16 = 4²"
+  ],
+  "conclusion": "The first 4 odd numbers add up to 4² = 16.",
+  "visualization": {
+    "template": "odd_sum",
+    "n": 4
+  },
+  "required_checks": [
+    "odd_terms",
+    "partial_sums_are_squares",
+    "sum_labels",
+    "total",
+    "rendered_values"
+  ]
+}

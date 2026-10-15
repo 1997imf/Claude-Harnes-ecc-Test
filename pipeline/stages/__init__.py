@@ -9,8 +9,9 @@ from pipeline.visuals import TEMPLATE_FILES
 
 FUNCTIONS_FILE = Path(__file__).resolve().parent.parent / "functions.py"
 SCHEMAS_FILE = Path(__file__).resolve().parent.parent / "schemas.py"
-# Planning and math checks for every visual type live here.
+# Planning and math checks: every visual type plus the lesson-plan checks.
 VISUAL_FILES = tuple(sorted(Path(visuals.__file__).resolve().parent.glob("*.py")))
+LESSON_FILES = tuple(Path(__file__).resolve().parent.parent / name for name in ("lesson.py", "arithmetic.py"))
 
 
 def _source(module) -> Path:
@@ -21,8 +22,8 @@ def _source(module) -> Path:
 DEFAULT_STAGES: tuple[Stage, ...] = (
     Stage(
         name="plan",
-        inputs=lambda p: (p.brief, _source(plan), FUNCTIONS_FILE, SCHEMAS_FILE, *VISUAL_FILES),
-        outputs=lambda p: (p.storyboard,),
+        inputs=lambda p: (p.brief, _source(plan), FUNCTIONS_FILE, SCHEMAS_FILE, *VISUAL_FILES, *LESSON_FILES),
+        outputs=lambda p: (p.lesson_plan, p.storyboard),
         run=plan.run,
         validate=plan.validate,
     ),
@@ -36,14 +37,15 @@ DEFAULT_STAGES: tuple[Stage, ...] = (
     ),
     Stage(
         name="quality_check",
-        inputs=lambda p: (p.video, p.render_facts, p.storyboard, _source(quality_check), *VISUAL_FILES),
+        inputs=lambda p: (p.video, p.render_facts, p.storyboard, p.lesson_plan, _source(quality_check),
+                          *VISUAL_FILES, *LESSON_FILES),
         outputs=lambda p: (p.qa_report,),
         run=quality_check.run,
         validate=quality_check.validate,
     ),
     Stage(
         name="package",
-        inputs=lambda p: (p.storyboard, p.qa_report, p.video, _source(package)),
+        inputs=lambda p: (p.storyboard, p.lesson_plan, p.qa_report, p.video, _source(package)),
         outputs=lambda p: (p.metadata, p.preview),
         run=package.run,
     ),

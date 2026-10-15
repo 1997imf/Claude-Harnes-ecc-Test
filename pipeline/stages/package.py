@@ -7,7 +7,7 @@ from html import escape
 
 from pipeline.paths import ProjectPaths
 from pipeline.runner import StageError
-from pipeline.schemas import STORYBOARD_ADAPTER, PublishMetadata, QAReport
+from pipeline.schemas import STORYBOARD_ADAPTER, LessonPlan, PublishMetadata, QAReport
 from pipeline.stages._io import read_model, write_model
 from pipeline.stages.quality_check import inspect_video
 
@@ -21,10 +21,13 @@ def _hashtags(storyboard) -> tuple[str, ...]:
     return ("#math", *topical, "#learnmath", *shorts)
 
 
-def build_metadata(storyboard, report: QAReport, width: int, height: int,
-                   duration: float) -> PublishMetadata:
+def build_metadata(storyboard, report: QAReport, width: int, height: int, duration: float,
+                   steps: tuple[str, ...] | None = None) -> PublishMetadata:
+    """`steps` are the lesson plan's explanation; without one, the storyboard narration is used."""
     hashtags = _hashtags(storyboard)
-    steps = "\n".join(f"• {beat.narration}" for beat in storyboard.beats if beat.narration)
+    if steps is None:
+        steps = tuple(beat.narration for beat in storyboard.beats if beat.narration)
+    steps = "\n".join(f"• {step}" for step in steps)
     answer = f"Result: {storyboard.result}."
     description = (
         f"{storyboard.learning_objective}\n\n{steps}\n\n{answer}\n"
@@ -109,11 +112,12 @@ def build_preview_html(storyboard, report: QAReport, video_href: str,
 
 def run(paths: ProjectPaths) -> None:
     storyboard = read_model(paths.storyboard, STORYBOARD_ADAPTER)
+    lesson = read_model(paths.lesson_plan, LessonPlan)
     report = read_model(paths.qa_report, QAReport)
     decoded, info = inspect_video(paths.video)
     if info is None:
         raise StageError(f"Cannot read the video for metadata: {decoded.detail}")
-    metadata = build_metadata(storyboard, report, info.width, info.height, info.duration)
+    metadata = build_metadata(storyboard, report, info.width, info.height, info.duration, lesson.steps)
     write_model(paths.metadata, metadata)
     video_href = paths.video.relative_to(paths.preview.parent).as_posix()
     html = build_preview_html(storyboard, report, video_href, metadata)

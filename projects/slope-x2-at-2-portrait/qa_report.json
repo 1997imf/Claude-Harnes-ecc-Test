@@ -51,6 +51,11 @@
       "name": "rendered_values",
       "status": "pass",
       "detail": "drawn values (final_h, point_x, point_y, tangent_intercept, tangent_slope) and all labels/captions match the storyboard"
+    },
+    {
+      "name": "lesson_plan",
+      "status": "pass",
+      "detail": "lesson verified; all 5 required checks ran and passed"
     }
   ]
 }

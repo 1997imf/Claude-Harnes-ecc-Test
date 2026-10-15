@@ -11,9 +11,10 @@ from pathlib import Path
 import numpy as np
 from pydantic import ValidationError
 
+from pipeline.lesson import check_required
 from pipeline.paths import ProjectPaths
 from pipeline.runner import StageError
-from pipeline.schemas import STORYBOARD_ADAPTER, CheckResult, QAReport, RenderFacts
+from pipeline.schemas import STORYBOARD_ADAPTER, CheckResult, LessonPlan, QAReport, RenderFacts
 from pipeline.stages._io import read_model, write_model
 from pipeline.visuals import VISUALS
 
@@ -130,7 +131,8 @@ def check_rendered_values(storyboard, facts_path: Path) -> CheckResult:
     return CheckResult.of("rendered_values", not problems, detail)
 
 
-def run_quality_checks(video: Path, storyboard, facts_path: Path) -> QAReport:
+def run_quality_checks(video: Path, storyboard, facts_path: Path,
+                       lesson: LessonPlan | None = None) -> QAReport:
     checks = [check_video_file(video)]
     decode_check, info = inspect_video(video)
     checks.append(decode_check)
@@ -141,13 +143,16 @@ def run_quality_checks(video: Path, storyboard, facts_path: Path) -> QAReport:
         checks += [check_resolution(info, storyboard), check_duration(info, storyboard), check_frames(info)]
     checks += VISUALS[storyboard.template].check_math(storyboard)  # topic-specific math
     checks.append(check_rendered_values(storyboard, facts_path))
+    if lesson is not None:  # must come last: it confirms the lesson's required checks ran and passed
+        checks.append(check_required(lesson, checks))
     passed = all(check.status == "pass" for check in checks)
     return QAReport(passed=passed, video=video.name, checks=tuple(checks))
 
 
 def run(paths: ProjectPaths) -> None:
     storyboard = read_model(paths.storyboard, STORYBOARD_ADAPTER)
-    report = run_quality_checks(paths.video, storyboard, paths.render_facts)
+    lesson = read_model(paths.lesson_plan, LessonPlan)
+    report = run_quality_checks(paths.video, storyboard, paths.render_facts, lesson)
     report = report.model_copy(update={"video": paths.relative(paths.video)})
     write_model(paths.qa_report, report)
     if not report.passed:

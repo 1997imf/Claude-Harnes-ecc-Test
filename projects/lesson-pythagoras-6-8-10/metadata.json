@@ -1,0 +1,25 @@
+{
+  "title": "Scaling a right triangle: 6-8-10",
+  "description": "See that doubling a 3-4-5 triangle gives 6² + 8² = 10² by counting unit squares.\n\n• Start from the 3-4-5 right triangle and double every side to get 6, 8 and 10.\n• Build a square on each side and count its unit squares: 36, 64 and 100.\n• The two smaller squares together hold exactly as many unit squares as the largest one.\n\nResult: 6² + 8² = 10² (36 + 64 = 100).\nAnimated with Manim; the math was checked automatically.\n\n#math #geometry #pythagoreantheorem #learnmath",
+  "tags": [
+    "math",
+    "geometry",
+    "pythagorean theorem",
+    "right triangle",
+    "area",
+    "manim"
+  ],
+  "hashtags": [
+    "#math",
+    "#geometry",
+    "#pythagoreantheorem",
+    "#learnmath"
+  ],
+  "instagram_caption": "Scaling a right triangle: 6-8-10\n\nSee that doubling a 3-4-5 triangle gives 6² + 8² = 10² by counting unit squares.\nResult: 6² + 8² = 10² (36 + 64 = 100).\n\n#math #geometry #pythagoreantheorem #learnmath",
+  "video": "renders/video.mp4",
+  "format": "landscape",
+  "width": 854,
+  "height": 480,
+  "duration_seconds": 13.53,
+  "qa_passed": true
+}

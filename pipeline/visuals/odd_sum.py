@@ -4,9 +4,14 @@ an n × n square, showing 1 + 3 + ... + (2n − 1) = n².
 
 import re
 
-from pipeline.schemas import Beat, CheckResult, OddSumBrief, OddSumStoryboard
+from pipeline.schemas import (
+    Beat, CheckResult, Definition, Equation, LessonPlan, OddSumBrief, OddSumClaim, OddSumParams,
+    OddSumStoryboard,
+)
 
 TAGS = ("math", "algebra", "sequences", "odd numbers", "square numbers", "proof without words", "manim")
+# Names returned by check_math (a test keeps them in sync).
+CHECK_NAMES = frozenset({"odd_terms", "partial_sums_are_squares", "total", "sum_labels"})
 
 
 def _running_sum(odds: tuple[int, ...]) -> str:
@@ -14,10 +19,7 @@ def _running_sum(odds: tuple[int, ...]) -> str:
     return terms if len(odds) == 1 else f"{terms} = {sum(odds)}"
 
 
-def build_storyboard(brief: OddSumBrief) -> OddSumStoryboard:
-    n = brief.n
-    odds = tuple(2 * k - 1 for k in range(1, n + 1))
-    partial = tuple(k * k for k in range(1, n + 1))
+def _beats(n: int) -> tuple[Beat, ...]:
     layers = []
     for k in range(1, n + 1):
         caption = "Start with 1 square" if k == 1 else f"Add {2 * k - 1} squares: now {k} × {k} = {k * k}"
@@ -34,20 +36,53 @@ def build_storyboard(brief: OddSumBrief) -> OddSumStoryboard:
         Beat(name="hold", description="Hold the final frame", run_time=2.0,
              caption=f"1 + 3 + … + {2 * n - 1} = {n}² = {n * n}"),
     )
-    return OddSumStoryboard(
-        template="odd_sum",
-        format=brief.format,
+    return beats
+
+
+def build_lesson(brief: OddSumBrief) -> LessonPlan:
+    """Deterministic lesson plan for a classic odd-sum brief."""
+    n = brief.n
+    odds = [2 * k - 1 for k in range(1, n + 1)]
+    return LessonPlan(
         topic=brief.topic,
         learning_objective=brief.objective or (
             f"See why 1 + 3 + 5 + … + {2 * n - 1} = {n}² by wrapping L-shaped layers around a square."
         ),
+        audience="middle_school",
+        definitions=(
+            Definition(term="odd number", meaning="a whole number of the form 2k − 1: 1, 3, 5, 7, …"),
+            Definition(term="square number", meaning="n × n, the number of cells in an n by n square"),
+        ),
+        equations=(
+            Equation(display=_running_sum(tuple(odds)) + f" = {n}²",
+                     arithmetic=" + ".join(map(str, odds)) + f" == {n}**2"),
+        ),
+        results=(OddSumClaim(kind="odd_sum", n=n, total=n * n),),
+        steps=tuple(beat.narration for beat in _beats(n) if beat.narration),
+        examples=tuple(f"{_running_sum(tuple(odds[:k]))}" + ("" if k == 1 else f" = {k}²")
+                       for k in range(2, n + 1)),
+        conclusion=f"The first {n} odd numbers add up to {n}² = {n * n}.",
+        visualization=OddSumParams(template="odd_sum", n=n),
+        required_checks=tuple(sorted(CHECK_NAMES)) + ("rendered_values",),
+    )
+
+
+def build_storyboard(lesson: LessonPlan, video_format: str) -> OddSumStoryboard:
+    n = lesson.visualization.n
+    odds = tuple(2 * k - 1 for k in range(1, n + 1))
+    partial = tuple(k * k for k in range(1, n + 1))
+    return OddSumStoryboard(
+        template="odd_sum",
+        format=video_format,
+        topic=lesson.topic,
+        learning_objective=lesson.learning_objective,
         result=f"1 + 3 + … + {2 * n - 1} = {n}² = {n * n}",
         tags=TAGS,
         n=n,
         odd_numbers=odds,
         partial_sums=partial,
         sum_labels=tuple(_running_sum(odds[:k]) for k in range(1, n + 1)),
-        beats=beats,
+        beats=_beats(n),
     )
 
 

@@ -8,17 +8,20 @@ area shown is an exact integer that the template can draw cell by cell.
 import math
 import re
 
-from pipeline.schemas import Beat, CheckResult, PythagorasBrief, PythagorasStoryboard
+from pipeline.schemas import (
+    Beat, CheckResult, Definition, Equation, LessonPlan, PythagorasBrief, PythagorasParams,
+    PythagoreanClaim, PythagorasStoryboard,
+)
 
 TAGS = ("math", "geometry", "pythagorean theorem", "right triangle", "area", "manim")
 RIGHT_ANGLE_DEGREES = 90.0
+# Names returned by check_math (a test keeps them in sync).
+CHECK_NAMES = frozenset({"pythagorean_triple", "triangle_inequality", "equation_label"})
 
 
-def build_storyboard(brief: PythagorasBrief) -> PythagorasStoryboard:
-    a, b = brief.a, brief.b
-    c = math.isqrt(a * a + b * b)
+def _beats(a: int, b: int, c: int) -> tuple[Beat, ...]:
     sq_a, sq_b, sq_c = a * a, b * b, c * c
-    beats = (
+    return (
         Beat(name="title", description="Show the topic", run_time=1.0),
         Beat(name="triangle", description="Draw the right triangle and its side lengths", run_time=2.0,
              caption=f"A right triangle with legs {a} and {b}",
@@ -39,19 +42,51 @@ def build_storyboard(brief: PythagorasBrief) -> PythagorasStoryboard:
              caption=f"So {a}² + {b}² = {c}²",
              narration=f"So {a} squared plus {b} squared equals {c} squared."),
     )
-    return PythagorasStoryboard(
-        template="pythagoras",
-        format=brief.format,
+
+
+def build_lesson(brief: PythagorasBrief) -> LessonPlan:
+    """Deterministic lesson plan for a classic Pythagoras brief."""
+    a, b = brief.a, brief.b
+    c = math.isqrt(a * a + b * b)
+    return LessonPlan(
         topic=brief.topic,
         learning_objective=brief.objective or (
             f"See that {a}² + {b}² = {c}² by counting the unit squares built on each side "
             "of a right triangle."
         ),
+        audience="middle_school",
+        definitions=(
+            Definition(term="right triangle", meaning="a triangle with one 90° angle"),
+            Definition(term="legs", meaning="the two sides that meet at the right angle"),
+            Definition(term="hypotenuse", meaning="the longest side, opposite the right angle"),
+        ),
+        equations=(
+            Equation(display=f"{a}² + {b}² = {c}²", arithmetic=f"{a}**2 + {b}**2 == {c}**2"),
+            Equation(display=f"{a * a} + {b * b} = {c * c}", arithmetic=f"{a * a} + {b * b} == {c * c}"),
+        ),
+        results=(PythagoreanClaim(kind="pythagorean", a=a, b=b, c=c),),
+        steps=tuple(beat.narration for beat in _beats(a, b, c) if beat.narration),
+        examples=(f"A {a}-{b}-{c} triangle: {a * a} + {b * b} = {c * c} unit squares.",),
+        conclusion=f"For a right triangle the two leg squares fill the hypotenuse square: {a}² + {b}² = {c}².",
+        visualization=PythagorasParams(template="pythagoras", a=a, b=b),
+        required_checks=tuple(sorted(CHECK_NAMES)) + ("rendered_values",),
+    )
+
+
+def build_storyboard(lesson: LessonPlan, video_format: str) -> PythagorasStoryboard:
+    a, b = lesson.visualization.a, lesson.visualization.b
+    c = math.isqrt(a * a + b * b)
+    sq_a, sq_b, sq_c = a * a, b * b, c * c
+    return PythagorasStoryboard(
+        template="pythagoras",
+        format=video_format,
+        topic=lesson.topic,
+        learning_objective=lesson.learning_objective,
         result=f"{a}² + {b}² = {c}² ({sq_a} + {sq_b} = {sq_c})",
         tags=TAGS,
         a=a, b=b, c=c,
         equation_label=f"{sq_a} + {sq_b} = {sq_c}",
-        beats=beats,
+        beats=_beats(a, b, c),
     )
 
 

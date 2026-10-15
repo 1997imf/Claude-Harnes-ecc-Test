@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "video": "renders/video.mp4",
+  "checks": [
+    {
+      "name": "video_file",
+      "status": "pass",
+      "detail": "181710 bytes"
+    },
+    {
+      "name": "video_decodes",
+      "status": "pass",
+      "detail": "203 frames at 15 fps"
+    },
+    {
+      "name": "resolution",
+      "status": "pass",
+      "detail": "854x480 (expected 854x480, landscape)"
+    },
+    {
+      "name": "duration",
+      "status": "pass",
+      "detail": "13.53 s (storyboard 13.50 s ± 1, limits 5–60 s)"
+    },
+    {
+      "name": "frames_not_blank",
+      "status": "pass",
+      "detail": "visible content in sampled frames: 1.6%, 7.5%, 13.3%"
+    },
+    {
+      "name": "pythagorean_triple",
+      "status": "pass",
+      "detail": "6² + 8² = 100, 10² = 100"
+    },
+    {
+      "name": "triangle_inequality",
+      "status": "pass",
+      "detail": "sides 6, 8, 10 form a triangle"
+    },
+    {
+      "name": "equation_label",
+      "status": "pass",
+      "detail": "on-screen '36 + 64 = 100' parsed as [36, 64, 100]"
+    },
+    {
+      "name": "rendered_values",
+      "status": "pass",
+      "detail": "drawn values (area_a, area_b, area_c, cells_a, cells_b, cells_c, hypotenuse, leg_a, leg_b, right_angle_deg) and all labels/captions match the storyboard"
+    },
+    {
+      "name": "lesson_plan",
+      "status": "pass",
+      "detail": "lesson verified; all 5 required checks ran and passed"
+    }
+  ]
+}

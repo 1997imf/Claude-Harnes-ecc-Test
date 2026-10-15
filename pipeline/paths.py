@@ -3,7 +3,8 @@
 projects/<slug>/
 ├── brief.json            input written by you
 ├── manifest.json         pipeline state
-├── storyboard.json       plan stage
+├── lesson_plan.json      plan stage (what to teach: claims, steps, visualization)
+├── storyboard.json       plan stage (how to show it: beats, captions, layout values)
 ├── scene/scene.json      render stage (parameters for the Manim template)
 ├── renders/              render stage (git-ignored)
 │   ├── video.mp4
@@ -40,6 +41,10 @@ class ProjectPaths:
     @property
     def manifest(self) -> Path:
         return self.project_dir / "manifest.json"
+
+    @property
+    def lesson_plan(self) -> Path:
+        return self.project_dir / "lesson_plan.json"
 
     @property
     def storyboard(self) -> Path:

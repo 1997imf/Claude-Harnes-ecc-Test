@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "topic": "Scaling a right triangle: 6-8-10",
+  "learning_objective": "See that doubling a 3-4-5 triangle gives 6² + 8² = 10² by counting unit squares.",
+  "audience": "middle_school",
+  "definitions": [
+    {
+      "term": "right triangle",
+      "meaning": "a triangle with one 90° angle"
+    },
+    {
+      "term": "hypotenuse",
+      "meaning": "the longest side, opposite the right angle"
+    }
+  ],
+  "equations": [
+    {
+      "display": "6² + 8² = 10²",
+      "arithmetic": "6**2 + 8**2 == 10**2"
+    },
+    {
+      "display": "36 + 64 = 100",
+      "arithmetic": "36 + 64 == 100"
+    },
+    {
+      "display": "(2·3)² + (2·4)² = (2·5)²",
+      "arithmetic": "(2*3)**2 + (2*4)**2 == (2*5)**2"
+    }
+  ],
+  "results": [
+    {
+      "kind": "pythagorean",
+      "a": 6,
+      "b": 8,
+      "c": 10
+    }
+  ],
+  "steps": [
+    "Start from the 3-4-5 right triangle and double every side to get 6, 8 and 10.",
+    "Build a square on each side and count its unit squares: 36, 64 and 100.",
+    "The two smaller squares together hold exactly as many unit squares as the largest one."
+  ],
+  "examples": [
+    "Doubling the sides multiplies every area by 4: 9 → 36, 16 → 64, 25 → 100."
+  ],
+  "conclusion": "6² + 8² = 10², just as 3² + 4² = 5².",
+  "visualization": {
+    "template": "pythagoras",
+    "a": 6,
+    "b": 8
+  },
+  "required_checks": [
+    "pythagorean_triple",
+    "equation_label",
+    "rendered_values",
+    "resolution",
+    "duration"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "topic": "A 5-12-13 right triangle",
+  "learning_objective": "See that 5² + 12² = 13² by counting the unit squares built on each side of a right triangle.",
+  "audience": "middle_school",
+  "definitions": [
+    {
+      "term": "right triangle",
+      "meaning": "a triangle with one 90° angle"
+    },
+    {
+      "term": "legs",
+      "meaning": "the two sides that meet at the right angle"
+    },
+    {
+      "term": "hypotenuse",
+      "meaning": "the longest side, opposite the right angle"
+    }
+  ],
+  "equations": [
+    {
+      "display": "5² + 12² = 13²",
+      "arithmetic": "5**2 + 12**2 == 13**2"
+    },
+    {
+      "display": "25 + 144 = 169",
+      "arithmetic": "25 + 144 == 169"
+    }
+  ],
+  "results": [
+    {
+      "kind": "pythagorean",
+      "a": 5,
+      "b": 12,
+      "c": 13
+    }
+  ],
+  "steps": [
+    "Here is a right triangle with legs 5 and 12 and hypotenuse 13.",
+    "The square on the leg of length 5 holds 25 unit squares.",
+    "The square on the leg of length 12 holds 144 unit squares.",
+    "The square on the hypotenuse, of length 13, holds 169 unit squares.",
+    "Add the two smaller areas: 25 plus 144 is 169.",
+    "So 5 squared plus 12 squared equals 13 squared."
+  ],
+  "examples": [
+    "A 5-12-13 triangle: 25 + 144 = 169 unit squares."
+  ],
+  "conclusion": "For a right triangle the two leg squares fill the hypotenuse square: 5² + 12² = 13².",
+  "visualization": {
+    "template": "pythagoras",
+    "a": 5,
+    "b": 12
+  },
+  "required_checks": [
+    "equation_label",
+    "pythagorean_triple",
+    "triangle_inequality",
+    "rendered_values"
+  ]
+}

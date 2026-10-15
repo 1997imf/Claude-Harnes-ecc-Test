@@ -1,0 +1,71 @@
+{
+  "schema_version": 3,
+  "format": "landscape",
+  "topic": "Scaling a right triangle: 6-8-10",
+  "learning_objective": "See that doubling a 3-4-5 triangle gives 6² + 8² = 10² by counting unit squares.",
+  "result": "6² + 8² = 10² (36 + 64 = 100)",
+  "tags": [
+    "math",
+    "geometry",
+    "pythagorean theorem",
+    "right triangle",
+    "area",
+    "manim"
+  ],
+  "beats": [
+    {
+      "name": "title",
+      "description": "Show the topic",
+      "run_time": 1.0,
+      "caption": "",
+      "narration": ""
+    },
+    {
+      "name": "triangle",
+      "description": "Draw the right triangle and its side lengths",
+      "run_time": 2.0,
+      "caption": "A right triangle with legs 6 and 8",
+      "narration": "Here is a right triangle with legs 6 and 8 and hypotenuse 10."
+    },
+    {
+      "name": "square_a",
+      "description": "Square on leg a, as a grid of unit cells",
+      "run_time": 2.0,
+      "caption": "Leg 6: square of area 6² = 36",
+      "narration": "The square on the leg of length 6 holds 36 unit squares."
+    },
+    {
+      "name": "square_b",
+      "description": "Square on leg b, as a grid of unit cells",
+      "run_time": 2.0,
+      "caption": "Leg 8: square of area 8² = 64",
+      "narration": "The square on the leg of length 8 holds 64 unit squares."
+    },
+    {
+      "name": "square_c",
+      "description": "Square on the hypotenuse, as a grid of unit cells",
+      "run_time": 2.5,
+      "caption": "Hypotenuse 10: area 10² = 100",
+      "narration": "The square on the hypotenuse, of length 10, holds 100 unit squares."
+    },
+    {
+      "name": "equation",
+      "description": "Write the area equation",
+      "run_time": 2.0,
+      "caption": "The two smaller areas add up to the largest",
+      "narration": "Add the two smaller areas: 36 plus 64 is 100."
+    },
+    {
+      "name": "hold",
+      "description": "Hold the final frame",
+      "run_time": 2.0,
+      "caption": "So 6² + 8² = 10²",
+      "narration": "So 6 squared plus 8 squared equals 10 squared."
+    }
+  ],
+  "template": "pythagoras",
+  "a": 6,
+  "b": 8,
+  "c": 10,
+  "equation_label": "36 + 64 = 100"
+}

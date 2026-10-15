@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "topic": "How steep is x² at x = 2?",
+  "learning_objective": "See why the slope of x² at x = 2 is 4, by watching secant lines turn into the tangent line.",
+  "audience": "high_school",
+  "definitions": [
+    {
+      "term": "secant line",
+      "meaning": "a line through two points of a curve"
+    },
+    {
+      "term": "tangent line",
+      "meaning": "the line that touches the curve at one point with the same steepness as the curve there"
+    },
+    {
+      "term": "derivative",
+      "meaning": "f′(x₀) = the limit of (f(x₀ + h) − f(x₀)) / h as h → 0"
+    }
+  ],
+  "equations": [
+    {
+      "display": "(f(x₀ + h) − f(x₀)) / h = 4 + h",
+      "arithmetic": "(((2.5)**2) - ((2.0)**2)) / 0.5 == 4.0 + 1.0*0.5 + 0.0*0.5**2"
+    },
+    {
+      "display": "y = 4x − 4",
+      "arithmetic": "4.0*(2.0) + (-4.0) == (2.0)**2"
+    }
+  ],
+  "results": [
+    {
+      "kind": "derivative",
+      "function": "x**2",
+      "at": 2.0,
+      "value": 4.0
+    }
+  ],
+  "steps": [
+    "Here is the curve f(x) = x².",
+    "We want the steepness of the curve exactly at the point P = (2, 4).",
+    "Pick a second point Q, a distance h to the right, and draw the line through P and Q.",
+    "The slope of this secant line works out to Slope = 4 + h.",
+    "Now slide Q toward P by shrinking h.",
+    "With h = 0.01 the secant slope is already 4.01.",
+    "In the limit, the secant lines become the tangent line.",
+    "So the derivative at x = 2 is 4: the slope of the tangent line."
+  ],
+  "examples": [
+    "With h = 1 the secant slope is 5.",
+    "With h = 0.01 it is 4.01."
+  ],
+  "conclusion": "f′(2) = 4; the tangent line at P is y = 4x − 4.",
+  "visualization": {
+    "template": "secant_tangent",
+    "function": "x**2",
+    "x0": 2.0,
+    "h_start": 1.0
+  },
+  "required_checks": [
+    "derivative",
+    "secant_converges",
+    "secant_formula",
+    "tangent_line",
+    "rendered_values"
+  ]
+}

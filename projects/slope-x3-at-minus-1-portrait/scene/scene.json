@@ -1,6 +1,6 @@
 {
   "template_file": "/Users/20286323/Developer/Claude-Harnes-Test/pipeline/templates/secant_tangent_scene.py",
-  "template_sha256": "d2eed7766eb21db656d7c939ce298e3eaa85035e34cdd0d5ad4c43d9c9e3655e",
+  "template_sha256": "ce8cc245ca241e7e85209e235f5c651fe8385a07268024cd56abac4a922d3c66",
   "scene_class": "SecantTangentTemplate",
   "storyboard": {
     "schema_version": 3,
